@@ -1,0 +1,23 @@
+[package]
+name = "spacetime-storage"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Spacetime storage facades: no_std-first key/value traits"
+repository.workspace = true
+readme = "README.md"
+
+[features]
+default = [] # no_std by default
+alloc = []
+std = ["alloc"]
+
+[[example]]
+name = "memstore_basic"
+required-features = ["std", "alloc"]
+
+[[example]]
+name = "prefix_scan"
+required-features = ["std"]
+
+[dependencies]

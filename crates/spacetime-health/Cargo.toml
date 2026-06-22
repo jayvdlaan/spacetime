@@ -1,0 +1,20 @@
+[package]
+name = "spacetime-health"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Portable health snapshot types shared across runtimes"
+repository = "https://github.com/airspace-project/airspace"
+
+[features]
+default = []
+alloc = []
+std = ["alloc", "spacetime-core/std"]
+serde = ["dep:serde"]
+
+[dependencies]
+spacetime-core = { version = "1.0.0", path = "../spacetime-core", package = "spacetime-core", default-features = false }
+serde = { version = "1", default-features = false, features = ["alloc", "derive"], optional = true }
+
+[dev-dependencies]
+serde_json = { version = "1" }

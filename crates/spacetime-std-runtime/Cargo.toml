@@ -1,0 +1,25 @@
+[package]
+name = "spacetime-std-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Std-backed Clock/Timer/Runtime implementations for spacetime-core"
+
+[dependencies]
+spacetime-core = { version = "1.0.0", path = "../spacetime-core", default-features = false, features = ["std"] }
+spacetime-logging = { version = "1.0.0", path = "../spacetime-logging", optional = true }
+tracing = { version = "0.1", optional = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"], optional = true }
+
+[features]
+default = ["std"]
+std = []
+logging = ["dep:spacetime-logging", "spacetime-logging/std", "dep:tracing", "dep:tracing-subscriber"]
+
+[dev-dependencies]
+spacetime-core = { version = "1.0.0", path = "../spacetime-core", default-features = false, features = ["std"] }
+
+[[example]]
+name = "two_modules"
+required-features = ["logging"]

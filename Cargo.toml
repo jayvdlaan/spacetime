@@ -1,0 +1,24 @@
+[workspace]
+members = [
+    "crates/spacetime-core",
+    "crates/spacetime-module",
+    "crates/spacetime-async-core",
+    "crates/spacetime-logging",
+    "crates/spacetime-io",
+    "crates/spacetime-storage",
+    "crates/spacetime-crypto",
+    "crates/spacetime-macros",
+    "crates/spacetime-std-runtime",
+    "crates/spacetime-capabilities",
+    "crates/spacetime-health",
+    "crates/spacetime-ipc",
+]
+resolver = "2"
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/jayvdlaan/spacetime"
+homepage = "https://github.com/jayvdlaan/spacetime"
+documentation = "https://github.com/jayvdlaan/spacetime#readme"

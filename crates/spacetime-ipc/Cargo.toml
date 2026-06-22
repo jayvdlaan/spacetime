@@ -1,0 +1,14 @@
+[package]
+name = "spacetime-ipc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Spacetime IPC facades: no_std-first inter-process communication traits"
+repository.workspace = true
+
+[features]
+default = [] # no_std by default
+alloc = []
+std = ["alloc"]
+
+[dependencies]

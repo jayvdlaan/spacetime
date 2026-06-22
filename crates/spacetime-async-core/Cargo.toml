@@ -1,0 +1,35 @@
+[package]
+name = "spacetime-async-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Spacetime async core: executor-agnostic async traits for no_std"
+repository.workspace = true
+
+[features]
+default = [] # no_std by default
+alloc = []
+std = ["alloc", "spacetime-core/std"]
+async-trait = ["dep:async-trait", "std"]
+# Interop adapters with Airframe (declared here for feature wiring from consumers).
+# Actual adapter code can live behind this feature in this crate or a sibling crate.
+airframe-interop = []
+
+[dependencies]
+spacetime-core = { version = "1.0.0", path = "../spacetime-core", package = "spacetime-core", default-features = false }
+async-trait = { version = "0.1", optional = true }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt", "macros", "sync"] }
+spacetime-std-runtime = { path = "../spacetime-std-runtime" }
+futures = "0.3"
+
+[[example]]
+name = "tokio_spawner"
+path = "examples/tokio_spawner.rs"
+required-features = ["std"]
+
+[[example]]
+name = "yield_coop"
+path = "examples/yield_coop.rs"
+required-features = ["std"]

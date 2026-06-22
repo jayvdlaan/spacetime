@@ -1,0 +1,22 @@
+[package]
+name = "spacetime-macros"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Procedural macros to reduce boilerplate for Spacetime modules (experimental)"
+repository.workspace = true
+
+[lib]
+proc-macro = true
+
+[features]
+default = []
+std = []
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full", "parsing"] }
+
+[dev-dependencies]
+spacetime-module = { path = "../spacetime-module" }

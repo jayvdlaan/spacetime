@@ -1,0 +1,38 @@
+[package]
+name = "spacetime-module"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Spacetime module graph and lifecycle helpers"
+repository.workspace = true
+
+[features]
+default = []
+alloc = []
+std = ["alloc", "spacetime-core/std"]
+
+[dependencies]
+spacetime-core = { version = "1.0.0", path = "../spacetime-core", package = "spacetime-core" }
+
+[dev-dependencies]
+spacetime-macros = { path = "../spacetime-macros" }
+
+[[example]]
+name = "graph_order"
+path = "examples/graph_order.rs"
+required-features = ["std"]
+
+[[example]]
+name = "order_print"
+path = "examples/order_print.rs"
+required-features = ["std"]
+
+[[example]]
+name = "order_iter"
+path = "examples/order_iter.rs"
+required-features = ["std"]
+
+[[example]]
+name = "derived_nodes"
+path = "examples/derived_nodes.rs"
+required-features = ["std"]

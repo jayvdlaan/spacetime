@@ -1,0 +1,20 @@
+[package]
+name = "spacetime-capabilities"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Minimal capability identity and metadata types for Spacetime runtimes"
+repository.workspace = true
+
+[features]
+default = []
+alloc = []
+serde = ["dep:serde", "serde/alloc"]
+std = ["alloc", "spacetime-core/std"]
+
+[dependencies]
+spacetime-core = { version = "1.0.0", path = "../spacetime-core", package = "spacetime-core", default-features = false }
+serde = { version = "1", default-features = false, features = ["derive"], optional = true }
+
+[dev-dependencies]
+serde_json = { version = "1" }

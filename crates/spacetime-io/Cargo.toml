@@ -1,0 +1,22 @@
+[package]
+name = "spacetime-io"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Spacetime I/O traits: no_std-friendly sync Read/Write/Flush facades"
+repository.workspace = true
+
+[features]
+default = [] # no_std by default
+alloc = []
+std = ["alloc"]
+
+[[test]]
+name = "smoke"
+required-features = ["std"]
+
+[[example]]
+name = "std_stdout"
+required-features = ["std"]
+
+[dependencies]
