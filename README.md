@@ -1,30 +1,66 @@
-Spacetime
-=========
+# Spacetime
 
-Spacetime is a minimal, no_std-first core layer that standardizes module semantics and abstracts over platform/runtime differences (embedded, std, wasm). It is designed to be reused by Airframe and other runtimes.
+Spacetime is a minimal, `no_std`-first platform-abstraction layer. It
+standardizes module semantics and abstracts over platform and runtime
+differences — embedded, `std`, and WASM — so the same module code can target a
+microcontroller or a server. It is the foundation that
+[Airframe](https://github.com/jayvdlaan/airframe) builds on, and is usable on its
+own.
 
-Badges
-- Workspace status: CI runs on pushes/PRs to main/master
-- Docs: see per-crate docs on docs.rs
+## Crates
 
-Useful links
-- Implementation plan: IMPLEMENTATION_PLAN.md
-- Dev guide: dev.md (feature matrix + publishing checklist)
-- Architecture overview: docs/spacetime_arch.md
+- `spacetime-core` — `Duration`, `Instant`, `Version`, and core error/status types (`no_std`)
+- `spacetime-module` — the `Module` trait and dependency-graph ordering
+- `spacetime-capabilities` — capability identifiers and module capability sets
+- `spacetime-io` / `spacetime-storage` / `spacetime-crypto` / `spacetime-health` / `spacetime-logging` — platform facades (I/O, storage, crypto, health, logging)
+- `spacetime-async-core` — async runtime / spawner primitives
+- `spacetime-std-runtime` — a `std`-backed Clock/Timer/Runtime implementation
+- `spacetime-macros` — supporting macros
+- `spacetime-ipc` — IPC primitives
 
-See IMPLEMENTATION_PLAN.md for the current roadmap and Airframe integration plan. For local development details (dual workspaces, feature-gated builds, and [patch.crates-io]), see dev.md.
+## Installation
 
-Quickstart examples (std feature)
-- spacetime-core example: `cargo run -p spacetime-core --example simple_module --features std`
-- spacetime-module example (graph check): `cargo run -p spacetime-module --example graph_order --features std`
-- spacetime-module example (print order): `cargo run -p spacetime-module --example order_print --features std`
-- spacetime-module example (sorted iterator): `cargo run -p spacetime-module --example order_iter --features std`
-- spacetime-logging example: `cargo run -p spacetime-logging --example simple --features std`
-- spacetime-logging example (tracing bridge): `cargo run -p spacetime-logging --example std_tracing --features std`
-- spacetime-logging example (custom logger + level filter): `cargo run -p spacetime-logging --example custom_logger --features std`
-- spacetime-io example: `cargo run -p spacetime-io --example std_stdout --features std`
-- spacetime-storage example: `cargo run -p spacetime-storage --example memstore_basic --features std,alloc`
-- spacetime-storage example (prefix scan): `cargo run -p spacetime-storage --example prefix_scan --features std`
-- spacetime-async-core example (Tokio spawner): `cargo run -p spacetime-async-core --example tokio_spawner --features std`
- - spacetime-async-core example (cooperative yield): `cargo run -p spacetime-async-core --example yield_coop --features std`
- - spacetime-std-runtime example (end-to-end two modules): `cargo run -p spacetime-std-runtime --features logging --example two_modules`
+```toml
+[dependencies]
+spacetime-core = "1.0"
+spacetime-module = "1.0"
+```
+
+## Feature flags
+
+Most crates support three build axes:
+
+- *(no features)* — pure `no_std`
+- `alloc` — `no_std` with an allocator
+- `std` — full standard library
+
+This is verified on a bare-metal target (`riscv32imac-unknown-none-elf`) as well
+as on `std`.
+
+## Examples
+
+```bash
+cargo run -p spacetime-core        --example simple_module  --features std
+cargo run -p spacetime-module      --example graph_order    --features std
+cargo run -p spacetime-logging     --example simple         --features std
+cargo run -p spacetime-storage     --example memstore_basic --features std,alloc
+cargo run -p spacetime-async-core  --example tokio_spawner  --features std
+cargo run -p spacetime-std-runtime --example two_modules    --features logging
+```
+
+## Documentation
+
+- [docs/arch-spacetime.md](docs/arch-spacetime.md) — architecture overview
+- [docs/guide-dev.md](docs/guide-dev.md) — development guide and feature matrix
+- Per-crate API docs on [docs.rs](https://docs.rs)
+
+## Contributing
+
+Contributions — including AI-assisted ones — are welcome. See
+[CONTRIBUTING.md](CONTRIBUTING.md). If you use an LLM or agent, point it at
+[AGENTS.md](AGENTS.md): it covers the gates, the `no_std` discipline, macro
+hygiene, and the verification a pull request must meet.
+
+## License
+
+Licensed under the [MIT License](LICENSE).
