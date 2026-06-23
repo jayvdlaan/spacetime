@@ -475,6 +475,11 @@ Tags are created for beta and stable releases, not for dev builds.
 
 Every spacetime-based project progresses through four maturity phases before it is considered production-ready.
 
+> For the end-to-end process of taking a project from development to a public
+> release on crates.io (with a history-truncated mirror), see the
+> [Release Runbook](guide-release.md) — an agent-executable runbook with
+> drop-in templates in [`docs/templates/`](templates/).
+
 ### Maturity phases
 
 | Phase | Version suffix | Description |
