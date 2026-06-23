@@ -54,6 +54,30 @@ cargo run -p spacetime-std-runtime --example two_modules    --features logging
 - [docs/guide-dev.md](docs/guide-dev.md) — development guide and feature matrix
 - Per-crate API docs on [docs.rs](https://docs.rs)
 
+## Development
+
+Tasks are driven by [`just`](https://github.com/casey/just):
+
+```bash
+just build          # cargo build --workspace
+just test           # cargo test --workspace
+just clippy         # cargo clippy --workspace --all-targets -- -D warnings
+just fmt            # cargo fmt --all
+just release-check  # the full gate: the above + the no_std / alloc / std builds
+                    # + the riscv32imac embedded target + rustdoc — before publish/PR
+```
+
+This project has **no CI, by design** — a deliberate supply-chain decision.
+`just release-check` *is* the gate, run locally. To build the embedded target,
+add it once: `rustup target add riscv32imac-unknown-none-elf`.
+
+### Dependencies
+
+Builds on stable Rust (edition 2021). The core crates are `no_std` and
+dependency-light; `std`-only functionality is gated behind the `std` feature.
+Each crate declares its dependencies in its `Cargo.toml`. `Cargo.lock` is
+intentionally not committed, as these are libraries.
+
 ## Contributing
 
 Contributions — including AI-assisted ones — are welcome. See
