@@ -88,4 +88,4 @@ let meta = CapabilityMeta {
 
 ## License
 
-MIT
+Licensed under the MIT License.

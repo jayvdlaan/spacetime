@@ -90,10 +90,3 @@ let err = IpcError::Timeout;
 // Renders as: "operation timed out"
 let _ = err == IpcError::Timeout; // IpcError is Copy + Eq
 ```
-
-## Status
-
-Pre-release (`0.2.0-beta`). The trait surface is intentionally small and may
-evolve ahead of a stable release.
-
-Licensed under MIT.
