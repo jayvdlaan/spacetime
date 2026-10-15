@@ -1,0 +1,734 @@
+{
+  "schema": 1,
+  "generator": "gen.sh \u2192 gen.py (python3 stdlib + age_ref.py); rage 0.12.1 / rage-keygen 0.12.1 for provenance 'rage: ...'",
+  "note": "rage output is randomised; vectors named rage_* are decrypt-only oracles. pyref_* files are deterministic (counter RNG, see rng).",
+  "keys": {
+    "x25519": {
+      "identity_file": "keys/x25519.txt",
+      "identity": "AGE-SECRET-KEY-1YX9CYV6YH7FDPQ9XXP4E2TT7T6XSJWQ67CLVE4CNG5YCZ5D9N77QZ8EEGV",
+      "recipient": "age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l",
+      "secret_hex": "218b823344bf92d080a6306b952d7e5e8d09381af63eccd71345098151a59fbc",
+      "public_key_hex": "a3b32ed01064185e2c6025b3498baf3b37dfc15f27e1e8ce8cf5feb4dabade01"
+    },
+    "ssh_ed25519": {
+      "private_file": "keys/ssh_ed25519",
+      "public_file": "keys/ssh_ed25519.pub",
+      "public_key_line": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDmjTStv9rjz6dfYVA9C4CD/dcvPnbRcarldbcpezIbC spacetime-age-ssh",
+      "seed_hex": "2fd4d6679dfea3aae5df5cd19cd04f80609aa11a49feaa6308e472c3b7b0c2c5",
+      "public_key_hex": "39a34d2b6ff6b8f3e9d7d8540f42e020ff75cbcf9db45c6ab95d6dca5ecc86c2",
+      "tag_hex": "eb88dd53",
+      "tag_b64": "64jdUw",
+      "x25519_public_hex": "4e7ad2ecc96a4dfc28733bb37040dd6efea365e8738329b581cc25982f170c3a"
+    },
+    "other": {
+      "recipient": "age1pfs35scwfutwsfctsdyp3j9qf2yyrera6ua58lvw40u4y9km63fq96d5dq"
+    }
+  },
+  "payloads": {
+    "p0": {
+      "file": "payloads/p0.bin",
+      "len": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "p1": {
+      "file": "payloads/p1.bin",
+      "len": 1,
+      "sha256": "c555eab45d08845ae9f10d452a99bfcb06f74a50b988fe7e48dd323789b88ee3"
+    },
+    "p64k": {
+      "file": "payloads/p64k.bin",
+      "len": 65536,
+      "sha256": "f6a5366455cfe5267ab0557198f18d893c4ac9b22ceb3f77cd2661f57084143c"
+    },
+    "p64k1": {
+      "file": "payloads/p64k1.bin",
+      "len": 65537,
+      "sha256": "ed74e3e453399fc24e9d7eb63fa0122acfb5ce12fe0d740be1ccbb91ffec32b5"
+    },
+    "p200k": {
+      "file": "payloads/p200k.bin",
+      "len": 204800,
+      "sha256": "c540c4e3c92a4741d2f3da5a84ecb1b9c5469f48654abf751b5ccf32912f9abc"
+    }
+  },
+  "vectors": [
+    {
+      "name": "rage_x25519_p0",
+      "file": "vectors/rage_x25519_p0.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": false,
+      "payload": "p0",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -o vectors/rage_x25519_p0.age payloads/p0.bin"
+    },
+    {
+      "name": "rage_x25519_p0_armored",
+      "file": "vectors/rage_x25519_p0_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": true,
+      "payload": "p0",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -a -o vectors/rage_x25519_p0_armored.age payloads/p0.bin"
+    },
+    {
+      "name": "rage_x25519_p1",
+      "file": "vectors/rage_x25519_p1.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": false,
+      "payload": "p1",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -o vectors/rage_x25519_p1.age payloads/p1.bin"
+    },
+    {
+      "name": "rage_x25519_p1_armored",
+      "file": "vectors/rage_x25519_p1_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": true,
+      "payload": "p1",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -a -o vectors/rage_x25519_p1_armored.age payloads/p1.bin"
+    },
+    {
+      "name": "rage_x25519_p64k",
+      "file": "vectors/rage_x25519_p64k.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": false,
+      "payload": "p64k",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -o vectors/rage_x25519_p64k.age payloads/p64k.bin"
+    },
+    {
+      "name": "rage_x25519_p64k_armored",
+      "file": "vectors/rage_x25519_p64k_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": true,
+      "payload": "p64k",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -a -o vectors/rage_x25519_p64k_armored.age payloads/p64k.bin"
+    },
+    {
+      "name": "rage_x25519_p64k1",
+      "file": "vectors/rage_x25519_p64k1.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": false,
+      "payload": "p64k1",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -o vectors/rage_x25519_p64k1.age payloads/p64k1.bin"
+    },
+    {
+      "name": "rage_x25519_p64k1_armored",
+      "file": "vectors/rage_x25519_p64k1_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": true,
+      "payload": "p64k1",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -a -o vectors/rage_x25519_p64k1_armored.age payloads/p64k1.bin"
+    },
+    {
+      "name": "rage_x25519_p200k",
+      "file": "vectors/rage_x25519_p200k.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": false,
+      "payload": "p200k",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -o vectors/rage_x25519_p200k.age payloads/p200k.bin"
+    },
+    {
+      "name": "rage_x25519_p200k_armored",
+      "file": "vectors/rage_x25519_p200k_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": true,
+      "payload": "p200k",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -a -o vectors/rage_x25519_p200k_armored.age payloads/p200k.bin"
+    },
+    {
+      "name": "rage_ssh_p0",
+      "file": "vectors/rage_ssh_p0.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p0",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -o vectors/rage_ssh_p0.age payloads/p0.bin"
+    },
+    {
+      "name": "rage_ssh_p0_armored",
+      "file": "vectors/rage_ssh_p0_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p0",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -a -o vectors/rage_ssh_p0_armored.age payloads/p0.bin"
+    },
+    {
+      "name": "rage_ssh_p1",
+      "file": "vectors/rage_ssh_p1.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p1",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -o vectors/rage_ssh_p1.age payloads/p1.bin"
+    },
+    {
+      "name": "rage_ssh_p1_armored",
+      "file": "vectors/rage_ssh_p1_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p1",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -a -o vectors/rage_ssh_p1_armored.age payloads/p1.bin"
+    },
+    {
+      "name": "rage_ssh_p64k",
+      "file": "vectors/rage_ssh_p64k.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p64k",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -o vectors/rage_ssh_p64k.age payloads/p64k.bin"
+    },
+    {
+      "name": "rage_ssh_p64k_armored",
+      "file": "vectors/rage_ssh_p64k_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p64k",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -a -o vectors/rage_ssh_p64k_armored.age payloads/p64k.bin"
+    },
+    {
+      "name": "rage_ssh_p64k1",
+      "file": "vectors/rage_ssh_p64k1.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p64k1",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -o vectors/rage_ssh_p64k1.age payloads/p64k1.bin"
+    },
+    {
+      "name": "rage_ssh_p64k1_armored",
+      "file": "vectors/rage_ssh_p64k1_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p64k1",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -a -o vectors/rage_ssh_p64k1_armored.age payloads/p64k1.bin"
+    },
+    {
+      "name": "rage_ssh_p200k",
+      "file": "vectors/rage_ssh_p200k.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p200k",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -o vectors/rage_ssh_p200k.age payloads/p200k.bin"
+    },
+    {
+      "name": "rage_ssh_p200k_armored",
+      "file": "vectors/rage_ssh_p200k_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p200k",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "rage -R keys/ssh_ed25519.pub -a -o vectors/rage_ssh_p200k_armored.age payloads/p200k.bin"
+    },
+    {
+      "name": "rage_both_p0",
+      "file": "vectors/rage_both_p0.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p0",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -o vectors/rage_both_p0.age payloads/p0.bin"
+    },
+    {
+      "name": "rage_both_p0_armored",
+      "file": "vectors/rage_both_p0_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p0",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -a -o vectors/rage_both_p0_armored.age payloads/p0.bin"
+    },
+    {
+      "name": "rage_both_p1",
+      "file": "vectors/rage_both_p1.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p1",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -o vectors/rage_both_p1.age payloads/p1.bin"
+    },
+    {
+      "name": "rage_both_p1_armored",
+      "file": "vectors/rage_both_p1_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p1",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -a -o vectors/rage_both_p1_armored.age payloads/p1.bin"
+    },
+    {
+      "name": "rage_both_p64k",
+      "file": "vectors/rage_both_p64k.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p64k",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -o vectors/rage_both_p64k.age payloads/p64k.bin"
+    },
+    {
+      "name": "rage_both_p64k_armored",
+      "file": "vectors/rage_both_p64k_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p64k",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -a -o vectors/rage_both_p64k_armored.age payloads/p64k.bin"
+    },
+    {
+      "name": "rage_both_p64k1",
+      "file": "vectors/rage_both_p64k1.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p64k1",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -o vectors/rage_both_p64k1.age payloads/p64k1.bin"
+    },
+    {
+      "name": "rage_both_p64k1_armored",
+      "file": "vectors/rage_both_p64k1_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p64k1",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -a -o vectors/rage_both_p64k1_armored.age payloads/p64k1.bin"
+    },
+    {
+      "name": "rage_both_p200k",
+      "file": "vectors/rage_both_p200k.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p200k",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -o vectors/rage_both_p200k.age payloads/p200k.bin"
+    },
+    {
+      "name": "rage_both_p200k_armored",
+      "file": "vectors/rage_both_p200k_armored.age",
+      "kind": "rage",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": true,
+      "payload": "p200k",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "rage -r age15weja5qsvsv9utrqyke5nza08vmals2lyls73n5v7hltfk46mcqsy3c60l -R keys/ssh_ed25519.pub -a -o vectors/rage_both_p200k_armored.age payloads/p200k.bin"
+    },
+    {
+      "name": "rage_other_p1",
+      "file": "vectors/rage_other_p1.age",
+      "kind": "rage",
+      "recipients": [
+        "other"
+      ],
+      "armored": false,
+      "payload": "p1",
+      "identities_ok": [],
+      "identities_no_match": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "provenance": "rage -r age1pfs35scwfutwsfctsdyp3j9qf2yyrera6ua58lvw40u4y9km63fq96d5dq -o vectors/rage_other_p1.age payloads/p1.bin"
+    },
+    {
+      "name": "pyref_x25519_p1",
+      "file": "vectors/pyref_x25519_p1.age",
+      "kind": "pyref",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": false,
+      "payload": "p1",
+      "rng": "counter:0",
+      "sha256": "fe15685c22adfaa99d7c4018a3bf07528a4abc2f76d00c9e169be9682483f1e1",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "age_ref.encrypt (deterministic)"
+    },
+    {
+      "name": "pyref_ssh_p1",
+      "file": "vectors/pyref_ssh_p1.age",
+      "kind": "pyref",
+      "recipients": [
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p1",
+      "rng": "counter:0",
+      "sha256": "ee522b279c24f461a52335197638588284946703cd08f868222a23d2e2835360",
+      "identities_ok": [
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [
+        "x25519"
+      ],
+      "provenance": "age_ref.encrypt (deterministic)"
+    },
+    {
+      "name": "pyref_both_p1",
+      "file": "vectors/pyref_both_p1.age",
+      "kind": "pyref",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p1",
+      "rng": "counter:0",
+      "sha256": "6aa7c51de7a8f5e6a382be968a1c7041bb5e9e2e82d9234365430c25ec057a9b",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "age_ref.encrypt (deterministic)"
+    },
+    {
+      "name": "pyref_both_p0",
+      "file": "vectors/pyref_both_p0.age",
+      "kind": "pyref",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p0",
+      "rng": "counter:0",
+      "sha256": "57f74b1c5eb871d83dfaab0039b81cf342d10681365ed0efeefc1778f47e5691",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "age_ref.encrypt (deterministic)"
+    },
+    {
+      "name": "pyref_x25519_p64k",
+      "file": "vectors/pyref_x25519_p64k.age",
+      "kind": "pyref",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": false,
+      "payload": "p64k",
+      "rng": "counter:0",
+      "sha256": "905abb0b7d809014597075f59d0e3ef6e86a1ef60279ca6d518afa349a49a92a",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "age_ref.encrypt (deterministic)"
+    },
+    {
+      "name": "pyref_both_p64k1",
+      "file": "vectors/pyref_both_p64k1.age",
+      "kind": "pyref",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "payload": "p64k1",
+      "rng": "counter:0",
+      "sha256": "1b6f69d4ce8655a8b9c7a6934c472c5e12eaef1213b2f95f9b3a44a50b542d50",
+      "identities_ok": [
+        "ssh_ed25519",
+        "x25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "age_ref.encrypt (deterministic)"
+    },
+    {
+      "name": "pyref_x25519_p1_armored",
+      "file": "vectors/pyref_x25519_p1_armored.age",
+      "kind": "pyref",
+      "recipients": [
+        "x25519"
+      ],
+      "armored": true,
+      "payload": "p1",
+      "rng": "counter:0",
+      "sha256": "a4bdefc3deece9180f185f89d64699785bb8a6b5bf8bca979e7943d67754fe65",
+      "identities_ok": [
+        "x25519"
+      ],
+      "identities_no_match": [
+        "ssh_ed25519"
+      ],
+      "provenance": "age_ref.encrypt (deterministic) + armor_encode"
+    },
+    {
+      "name": "pyref_both_det",
+      "file": "vectors/pyref_both_det.age",
+      "kind": "pyref",
+      "recipients": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "armored": false,
+      "plaintext_hex": "6465740a",
+      "rng": "counter:0",
+      "sha256": "9750c16527fcd0f924c40529d9ec1f072eceef822a5c9054c32c02f54201df1b",
+      "identities_ok": [
+        "x25519",
+        "ssh_ed25519"
+      ],
+      "identities_no_match": [],
+      "provenance": "age_ref.encrypt (deterministic)"
+    }
+  ]
+}

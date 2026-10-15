@@ -19,6 +19,7 @@ flowchart TD
   storage[spacetime-storage\n(no_std)]
   crypto[spacetime-crypto\n(no_std)]
   sshsig[spacetime-sshsig\n(no_std)]
+  age[spacetime-age\n(no_std)]
   asyncc[spacetime-async-core\n(no_std)]
   module[spacetime-module\n(no_std; builds on core)]
   macros[spacetime-macros\n(proc-macro, std)]
@@ -26,6 +27,7 @@ flowchart TD
 
   module --> core
   sshsig --> crypto
+  age --> crypto
   storage --> crypto
   storage --> io
   stdrt --> core

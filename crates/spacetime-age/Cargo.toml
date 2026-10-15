@@ -1,0 +1,38 @@
+[package]
+name = "spacetime-age"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "age-encryption.org/v1 file format for no_std: header/stanza codec with grease tolerance, header MAC, STREAM payload, X25519 and ssh-ed25519 recipients, bech32 keys, armor and header inspection — generic over the spacetime-crypto facades"
+repository.workspace = true
+readme = "README.md"
+
+[features]
+default = []       # no_std by default
+alloc = []
+std = ["alloc"]
+
+[dependencies]
+spacetime-crypto = { version = "2.0.0", path = "../spacetime-crypto", default-features = false }
+
+[dev-dependencies]
+# Test-only real backend for tests/common/mod.rs, proven by the spacetime-crypto
+# conformance harness before it is used as an oracle. Not part of the published graph; src/ stays
+# trait-generic. Never enable `legacy_compatibility`.
+spacetime-crypto = { version = "2.0.0", path = "../spacetime-crypto", features = ["std", "conformance"] }
+ed25519-dalek = { version = "2.2.0", default-features = false, features = ["std"] }
+x25519-dalek = { version = "2.0.1", default-features = false, features = ["static_secrets", "precomputed-tables"] }
+sha2 = "0.10.9"
+hmac = "0.12.1"
+hkdf = "0.12.4"
+chacha20poly1305 = { version = "0.10.1", default-features = false, features = ["alloc"] }
+serde_json = "1"
+# zlib inflate for the 22 `compressed: zlib` CCTV vectors (§0 D14).
+miniz_oxide = "0.8"
+
+[[test]]
+name = "alloc_api"
+required-features = ["alloc"]
+
+[package.metadata.docs.rs]
+all-features = true

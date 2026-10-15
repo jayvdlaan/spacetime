@@ -64,7 +64,7 @@ Blob seam
 - Trust: an id is the digest of whichever `Sha256` backend the consumer injects; the `sha256/` path component asserts that backend really is SHA-256, and this crate cannot check that — choosing it is the consumer's security decision.
 - Errors: `StorageError` gains `HashMismatch` (a verified read's digest differed at EOF) and `Digest(CryptoErrorKind)` (the SHA-256 backend failed); `spacetime_io::IoError::NotFound` maps to `StorageError::NotFound`, every other `IoError` variant maps to `StorageError::Io`.
 
-Non-goals (see the module docs for the full list): chunking or a chunked manifest (blobs are whole files in v1); compression; encryption (wrap the bytes before `put`); classes, retention or placement inside the seam; a network transport or sync protocol; garbage collection of empty `<aa>` directories; a `dyn`-safe form of `BlobStore`; Windows semantics; a caller-supplied id on `put`; overwrite of an existing blob.
+Non-goals (see the module docs for the full list): chunking or a chunked manifest (blobs are whole files in v1); compression; encryption (wrap with age, e.g. `spacetime-age`, before `put`); classes, retention or placement inside the seam; a network transport or sync protocol; garbage collection of empty `<aa>` directories; a `dyn`-safe form of `BlobStore`; Windows semantics; a caller-supplied id on `put`; overwrite of an existing blob.
 
 Notes
 - The std MemStore is for development and testing only; it does not guarantee iteration order for prefix scans.

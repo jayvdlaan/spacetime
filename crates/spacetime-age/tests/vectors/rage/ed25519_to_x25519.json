@@ -1,0 +1,51 @@
+{
+  "vectors": [
+    {
+      "name": "Ed25519\u2192X25519 RFC 8032 TEST 1",
+      "ed25519_public_hex": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+      "x25519_public_hex": "d85e07ec22b0ad881537c2f44d662d1a143cf830c57aca4305d85c7a90f6b62e"
+    },
+    {
+      "name": "Ed25519\u2192X25519 RFC 8032 TEST 2",
+      "ed25519_public_hex": "3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c",
+      "x25519_public_hex": "25c704c594b88afc00a76b69d1ed2b984d7e22550f3ed0802d04fbcd07d38d47"
+    },
+    {
+      "name": "Ed25519\u2192X25519 RFC 8032 TEST 3",
+      "ed25519_public_hex": "fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025",
+      "x25519_public_hex": "cbb22fc9f790bd3eba9b84680c157ca4950a9894362601701f89c3c4d9fda23a"
+    },
+    {
+      "name": "Ed25519\u2192X25519 RFC 8032 TEST SHA(abc)",
+      "ed25519_public_hex": "ec172b93ad5e563bf4932c70e1245034c35467ef2efd4d64ebf819683467e2bf",
+      "x25519_public_hex": "d5948dca7a9ad7175303dc6881c34aa7881fb946ee34dfd8fab126ed6db8da69"
+    },
+    {
+      "name": "spacetime-age vector ssh key",
+      "ed25519_public_hex": "39a34d2b6ff6b8f3e9d7d8540f42e020ff75cbcf9db45c6ab95d6dca5ecc86c2",
+      "x25519_public_hex": "4e7ad2ecc96a4dfc28733bb37040dd6efea365e8738329b581cc25982f170c3a"
+    }
+  ],
+  "invalid": [
+    {
+      "name": "Ed25519 identity point",
+      "ed25519_public_hex": "0100000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "name": "Ed25519 order-2 point (y = -1)",
+      "ed25519_public_hex": "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"
+    },
+    {
+      "name": "Ed25519 order-4 point (y = 0)",
+      "ed25519_public_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "name": "Ed25519 non-canonical y = p + 1",
+      "ed25519_public_hex": "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"
+    },
+    {
+      "name": "Ed25519 non-canonical y = p + 1, sign bit set",
+      "ed25519_public_hex": "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  ]
+}

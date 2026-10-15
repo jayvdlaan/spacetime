@@ -14,6 +14,7 @@ own.
 - `spacetime-capabilities` — capability identifiers and module capability sets
 - `spacetime-io` / `spacetime-storage` / `spacetime-crypto` / `spacetime-health` / `spacetime-logging` — platform facades (I/O, storage incl. a content-addressed blob seam, crypto, health, logging)
 - `spacetime-sshsig` — OpenSSH SSHSIG codec over the crypto facades (`no_std`)
+- `spacetime-age` — age-encryption.org/v1 codec over the crypto facades (`no_std`)
 - `spacetime-async-core` — async runtime / spawner primitives
 - `spacetime-std-runtime` — a `std`-backed Clock/Timer/Runtime implementation
 - `spacetime-macros` — supporting macros

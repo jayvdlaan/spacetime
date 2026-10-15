@@ -41,6 +41,7 @@ release-check:
     # crate-specific feature that the workspace default does not enable
     cargo test -p spacetime-crypto --features std,conformance
     cargo test -p spacetime-sshsig --features std
+    cargo test -p spacetime-age --features std
     cargo test -p spacetime-storage --features std
     cargo build --workspace
     # no_std discipline: pure no_std builds of the core crates
@@ -50,11 +51,14 @@ release-check:
     cargo build -p spacetime-crypto --no-default-features
     cargo build -p spacetime-sshsig --no-default-features
     cargo build -p spacetime-sshsig --no-default-features --features alloc
+    cargo build -p spacetime-age --no-default-features
+    cargo build -p spacetime-age --no-default-features --features alloc
     cargo build -p spacetime-storage --no-default-features
     cargo build -p spacetime-storage --no-default-features --features alloc
     # embedded target (proves no_std end-to-end)
     cargo build -p spacetime-module --target riscv32imac-unknown-none-elf
     cargo build -p spacetime-sshsig --no-default-features --target riscv32imac-unknown-none-elf
+    cargo build -p spacetime-age --no-default-features --target riscv32imac-unknown-none-elf
     cargo build -p spacetime-storage --no-default-features --target riscv32imac-unknown-none-elf
     RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps
     # default features hide the blob stores; docs.rs builds all-features, so gate that surface too
@@ -74,6 +78,7 @@ publish:
     cargo publish -p spacetime-capabilities
     cargo publish -p spacetime-crypto
     cargo publish -p spacetime-sshsig
+    cargo publish -p spacetime-age
     cargo publish -p spacetime-health
     cargo publish -p spacetime-io
     cargo publish -p spacetime-ipc
