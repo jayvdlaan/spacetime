@@ -7,6 +7,7 @@ members = [
     "crates/spacetime-io",
     "crates/spacetime-storage",
     "crates/spacetime-crypto",
+    "crates/spacetime-sshsig",
     "crates/spacetime-macros",
     "crates/spacetime-std-runtime",
     "crates/spacetime-capabilities",

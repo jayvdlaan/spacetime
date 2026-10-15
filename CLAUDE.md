@@ -18,6 +18,7 @@ spacetime/
     ├── spacetime-io/             # I/O traits
     ├── spacetime-storage/        # Storage abstraction
     ├── spacetime-crypto/         # Crypto traits
+    ├── spacetime-sshsig/         # OpenSSH SSHSIG codec over the crypto traits
     ├── spacetime-health/         # Health check traits
     ├── spacetime-capabilities/   # Capability system
     ├── spacetime-async-core/     # Async primitives

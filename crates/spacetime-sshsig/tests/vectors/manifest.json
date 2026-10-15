@@ -1,0 +1,869 @@
+{
+  "schema": 1,
+  "generator": "gen.sh -> gen.py (python3, stdlib) + ed25519_ref.py; ssh-keygen OpenSSH_10.2p1, OpenSSL 3.5.8 25 Aug 2026 for provenance 'ssh-keygen: ...'",
+  "namespace": "spacetime-sshsig-test-v1",
+  "other_namespace": "spacetime-sshsig-other-v1",
+  "keys": {
+    "a": {
+      "type": "ssh-ed25519",
+      "seed_hex": "a7c884c52f11deb9f8fe0e803ad3229aa7e974dda980afe5aa815b8ee7ce2c65",
+      "public_key_hex": "2f95df718ac66d75efdd62735246def130cb3c8f8e4a818407eeb1271502a5bb",
+      "private_file": "keys/a",
+      "public_file": "keys/a.pub",
+      "fingerprint": "SHA256:5FxuSKuU4+XupSaJNmRMPpy+07DhkxvYrylShCh0GVM"
+    },
+    "b": {
+      "type": "ssh-ed25519",
+      "seed_hex": "bb6b36fb48b77829b69428f3d7be483e614e6ca5bb0150a05aa5727a1a04e958",
+      "public_key_hex": "a240be8bf1dad5a485dd35dcade841d2ca9087b1513afd07dc971b4d6f61bb0d",
+      "private_file": "keys/b",
+      "public_file": "keys/b.pub",
+      "fingerprint": "SHA256:9QyLndDsouyFRirdn58g4s8u+ogYRpU3rRtE18LnlE8"
+    },
+    "c": {
+      "type": "sk-ssh-ed25519@openssh.com",
+      "application": "ssh:",
+      "seed_hex": "08d5e9d838e4188e1cf4ff655b18f83b1f402eb5f380a6f724cd9d877003a417",
+      "public_key_hex": "b556812f530cfe18c5905526c21122bf3be78b93263d3b44e569e03a94f91bc9",
+      "public_file": "keys/c.pub",
+      "fingerprint": "SHA256:78wb2B6GDw5YYHb3bz4ntk7FezhZoFkodDoFj5iDh7g"
+    }
+  },
+  "messages": {
+    "hello": "msgs/hello.txt",
+    "empty": "msgs/empty.bin",
+    "large": "msgs/large.bin"
+  },
+  "vectors": [
+    {
+      "name": "ok_ed25519_hello",
+      "kind": "positive",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/ok_ed25519_hello.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "ssh-keygen -Y sign -f keys/a -n spacetime-sshsig-test-v1 msgs/hello.txt",
+      "deterministic_sign": true
+    },
+    {
+      "name": "ok_ed25519_empty",
+      "kind": "positive",
+      "key": "a",
+      "message": "empty",
+      "sig": "sigs/ok_ed25519_empty.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "ssh-keygen -Y sign -f keys/a -n spacetime-sshsig-test-v1 msgs/empty.bin",
+      "deterministic_sign": true
+    },
+    {
+      "name": "ok_ed25519_large",
+      "kind": "positive",
+      "key": "a",
+      "message": "large",
+      "sig": "sigs/ok_ed25519_large.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "ssh-keygen -Y sign -f keys/a -n spacetime-sshsig-test-v1 msgs/large.bin",
+      "deterministic_sign": true
+    },
+    {
+      "name": "ok_ed25519_key_b",
+      "kind": "positive",
+      "key": "b",
+      "message": "hello",
+      "sig": "sigs/ok_ed25519_key_b.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKJAvovx2tWkhd013K3oQdLKkIexUTr9B9yXG01vYbsN",
+      "provenance": "ssh-keygen -Y sign -f keys/b -n spacetime-sshsig-test-v1 msgs/hello.txt",
+      "deterministic_sign": true
+    },
+    {
+      "name": "ok_armor_76_cols",
+      "kind": "positive",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/ok_armor_76_cols.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "re-armor of sigs/ok_ed25519_hello.sig's blob at 76-column lines (PROTOCOL.sshsig max line width)"
+    },
+    {
+      "name": "ok_armor_no_final_newline",
+      "kind": "positive",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/ok_armor_no_final_newline.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "sigs/ok_ed25519_hello.sig with the final trailing newline after the END footer removed"
+    },
+    {
+      "name": "ok_sk_up",
+      "kind": "positive",
+      "key": "c",
+      "message": "hello",
+      "sig": "sigs/ok_sk_up.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILVWgS9TDP4YxZBVJsIRIr8754uTJj07ROVp4DqU+RvJAAAABHNzaDo=",
+      "provenance": "synthetic: sk-ssh-ed25519@openssh.com, key C, application 'ssh:', flags=0x01 (UP), counter=7; Ed25519 signature computed by ed25519_ref.sign(seed_C, SHA256(application)||flags||counter_be32||SHA256(signed_data))"
+    },
+    {
+      "name": "ok_sk_up_uv",
+      "kind": "positive",
+      "key": "c",
+      "message": "hello",
+      "sig": "sigs/ok_sk_up_uv.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ok"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILVWgS9TDP4YxZBVJsIRIr8754uTJj07ROVp4DqU+RvJAAAABHNzaDo=",
+      "provenance": "synthetic: as ok_sk_up but flags=0x05 (UP|UV), counter=8 \u2014 valid under both SkPolicy settings",
+      "also_uv_required": true
+    },
+    {
+      "name": "neg_sk_uv_missing",
+      "kind": "negative",
+      "key": "c",
+      "message": "hello",
+      "sig": "sigs/ok_sk_up.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": true
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SkUserVerificationMissing"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILVWgS9TDP4YxZBVJsIRIr8754uTJj07ROVp4DqU+RvJAAAABHNzaDo=",
+      "provenance": "reuses sigs/ok_sk_up.sig (flags=0x01, no UV) verified under SkPolicy{require_user_verification:true}"
+    },
+    {
+      "name": "neg_sk_flags_zero",
+      "kind": "negative",
+      "key": "c",
+      "message": "hello",
+      "sig": "sigs/neg_sk_flags_zero.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SkUserPresenceMissing"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILVWgS9TDP4YxZBVJsIRIr8754uTJj07ROVp4DqU+RvJAAAABHNzaDo=",
+      "provenance": "synthetic: as ok_sk_up but flags=0x00 (neither UP nor UV), counter=42"
+    },
+    {
+      "name": "neg_sk_wrong_application",
+      "kind": "negative",
+      "key": "c",
+      "message": "hello",
+      "sig": "sigs/neg_sk_wrong_application.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILVWgS9TDP4YxZBVJsIRIr8754uTJj07ROVp4DqU+RvJAAAABHNzaDo=",
+      "provenance": "synthetic: key blob declares application 'ssh:' but the inner Ed25519 message was built over SHA256(b'ssh:other') instead of SHA256(b'ssh:') \u2014 flags=0x01, counter=2"
+    },
+    {
+      "name": "neg_s_plus_l",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_s_plus_l.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "honest (R,A) of ok_ed25519_hello; S := S + L (little-endian 32-byte int) \u2014 passes the naive curve equation mod L but fails a strict S < L check"
+    },
+    {
+      "name": "neg_s_zero",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_s_zero.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "honest R and A of ok_ed25519_hello; S forged to 0 (an ordinary invalid signature)"
+    },
+    {
+      "name": "neg_small_order_a",
+      "kind": "negative",
+      "key": null,
+      "message": "hello",
+      "sig": "sigs/neg_small_order_a.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "provenance": "universal identity forgery: A := identity encoding (01 00...00), R := identity encoding, S := 0 \u2014 0*B == identity == R + 0*A holds trivially; rejected only by an explicit small-order check on A"
+    },
+    {
+      "name": "neg_small_order_r",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_small_order_r.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "honest A of key a; R := order-4 encoding (32 zero bytes, [8]R == identity but R != identity), S := 0"
+    },
+    {
+      "name": "neg_noncanonical_a",
+      "kind": "negative",
+      "key": null,
+      "message": "hello",
+      "sig": "sigs/neg_noncanonical_a.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO7///////////////////////////////////////9/",
+      "provenance": "A := non-canonical encoding of the identity (y = p+1, i.e. ee ff*30 7f little-endian), R := identity encoding, S := 0. Verified fact (this machine, OpenSSH_10.2p1/OpenSSL 3.5.8): ssh-keygen -Y verify ACCEPTS this \u2014 the contract's table (V12) anticipated 'reject' by analogy with an honest-signature non-canonical-A test, but this specific construction reduces A to the identity by mod-p reduction before the curve check, landing in the same universal-forgery class as neg_small_order_a (V10, also 'accept'); a non-canonical encoding of a genuine large-order point paired with an otherwise-honest signature would behave differently, but the contract's construction (\u00a75.2/\u00a75.4) pins this exact identity-based encoding. Documented as an additional, empirically-confirmed divergence beyond \u00a79.3."
+    },
+    {
+      "name": "neg_noncanonical_r",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_noncanonical_r.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "honest A of key a; R := non-canonical encoding of the identity (y = p+1), S := 0"
+    },
+    {
+      "name": "neg_wrong_message",
+      "kind": "negative",
+      "key": "a",
+      "message": "empty",
+      "sig": "sigs/ok_ed25519_hello.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignatureInvalid"
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "reuses sigs/ok_ed25519_hello.sig (signed over msgs/hello.txt) but verified against msgs/empty.bin"
+    },
+    {
+      "name": "neg_reserved_nonempty",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_reserved_nonempty.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "ReservedNotEmpty"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "sigs/ok_ed25519_hello.sig's blob with the outer reserved field patched to b'x' (the Ed25519 signature itself is untouched, still made over reserved=\"\")"
+    },
+    {
+      "name": "neg_hash_sha256",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_hash_sha256.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "HashAlgorithmNotSha512"
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "ssh-keygen -Y sign -O hashalg=sha256 -f keys/a -n spacetime-sshsig-test-v1 msgs/hello.txt"
+    },
+    {
+      "name": "neg_wrong_namespace",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_wrong_namespace.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "NamespaceMismatch"
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "ssh-keygen -Y sign -f keys/a -n spacetime-sshsig-other-v1 msgs/hello.txt; verified with expected namespace spacetime-sshsig-test-v1"
+    },
+    {
+      "name": "neg_empty_namespace_in_sig",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_empty_namespace_in_sig.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "NamespaceMismatch"
+      },
+      "ssh_keygen": "n/a",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "synthetic (ed25519_ref only): honest ssh-ed25519 signature by key a over msgs/hello.txt with blob namespace == \"\"; ssh-keygen -Y sign refuses -n \"\" (verified: exit != 0), hence no oracle equivalent for this specific construction \u2014 recorded n/a per contract"
+    },
+    {
+      "name": "neg_signer_mismatch",
+      "kind": "negative",
+      "key": "b",
+      "message": "hello",
+      "sig": "sigs/ok_ed25519_hello.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ok",
+        "verify": "SignerMismatch"
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKJAvovx2tWkhd013K3oQdLKkIexUTr9B9yXG01vYbsN",
+      "provenance": "reuses sigs/ok_ed25519_hello.sig (embedded key a) with expected signer key b; ssh-keygen cross-check uses -I for a principal whose allowed_signers key is b, which does not match the embedded key a"
+    },
+    {
+      "name": "neg_version_2",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_version_2.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "UnsupportedVersion",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "outer version field patched from 1 to 2"
+    },
+    {
+      "name": "neg_bad_magic",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_bad_magic.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "BadMagic",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "outer magic patched from b'SSHSIG' to b'SSHSIH'"
+    },
+    {
+      "name": "neg_truncated_blob",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_truncated_blob.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "Truncated",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "last 10 bytes of the honest blob dropped"
+    },
+    {
+      "name": "neg_trailing_outer",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_trailing_outer.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "TrailingBytes(Outer)",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "a single 0x00 byte appended after the well-formed outer blob"
+    },
+    {
+      "name": "neg_trailing_key_blob",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_trailing_key_blob.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "TrailingBytes(PublicKey)",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7AA==",
+      "provenance": "a single 0x00 byte appended to the well-formed key blob payload (type+key); the outer \"string publickey\" length prefix is updated to include it"
+    },
+    {
+      "name": "neg_trailing_sig_blob",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_trailing_sig_blob.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "TrailingBytes(Signature)",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "a single 0x00 byte appended to the well-formed signature blob payload (type+sig); the outer \"string signature\" length prefix is updated to include it"
+    },
+    {
+      "name": "neg_key_type_rsa",
+      "kind": "negative",
+      "key": null,
+      "message": "hello",
+      "sig": "sigs/neg_key_type_rsa.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "UnknownKeyType",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-rsa AAAAB3NzaC1yc2EAAAAgL5XfcYrGbXXv3WJzUkbe8TDLPI+OSoGEB+6xJxUCpbs=",
+      "provenance": "key blob type string replaced with b'ssh-rsa' (payload, the 32-byte value, unchanged)"
+    },
+    {
+      "name": "neg_key_type_cert",
+      "kind": "negative",
+      "key": null,
+      "message": "hello",
+      "sig": "sigs/neg_key_type_cert.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "UnknownKeyType",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519-cert-v01@openssh.com AAAAIHNzaC1lZDI1NTE5LWNlcnQtdjAxQG9wZW5zc2guY29tAAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "key blob type string replaced with b'ssh-ed25519-cert-v01@openssh.com' (payload unchanged)"
+    },
+    {
+      "name": "neg_sig_type_unknown",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_sig_type_unknown.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "UnknownSignatureType",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "signature blob type string replaced with b'ssh-rsa' (payload unchanged)"
+    },
+    {
+      "name": "neg_sig_type_mismatch",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_sig_type_mismatch.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "KeyTypeMismatch",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "key blob is plain ssh-ed25519 (key a); signature blob rewritten into sk-ssh-ed25519@openssh.com layout (same 64-byte sig payload, flags=0x01, counter=1)"
+    },
+    {
+      "name": "neg_key_len_31",
+      "kind": "negative",
+      "key": null,
+      "message": "hello",
+      "sig": "sigs/neg_key_len_31.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "BadKeyLength",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAHy+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqU=",
+      "provenance": "key string payload truncated to 31 bytes"
+    },
+    {
+      "name": "neg_sig_len_63",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_sig_len_63.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "BadSignatureLength",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "signature string payload truncated to 63 bytes"
+    },
+    {
+      "name": "neg_armor_line_too_long",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_armor_line_too_long.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ArmorLineTooLong",
+        "verify": null
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "sigs/ok_ed25519_hello.sig's blob re-armored with the entire base64 payload on a single line (well over the 76-character limit)"
+    },
+    {
+      "name": "neg_armor_bad_base64",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_armor_bad_base64.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ArmorBadBase64",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "sigs/ok_ed25519_hello.sig with the first character of the second line replaced by '*'"
+    },
+    {
+      "name": "neg_armor_missing_end",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_armor_missing_end.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ArmorMissingFooter",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "sigs/ok_ed25519_hello.sig with the '-----END SSH SIGNATURE-----' line removed"
+    },
+    {
+      "name": "neg_armor_missing_begin",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_armor_missing_begin.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ArmorMissingHeader",
+        "verify": null
+      },
+      "ssh_keygen": "reject",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "sigs/ok_ed25519_hello.sig with the '-----BEGIN SSH SIGNATURE-----' line removed"
+    },
+    {
+      "name": "neg_armor_trailing_text",
+      "kind": "negative",
+      "key": "a",
+      "message": "hello",
+      "sig": "sigs/neg_armor_trailing_text.sig",
+      "expected_namespace": "spacetime-sshsig-test-v1",
+      "policy": {
+        "require_user_verification": false
+      },
+      "expect": {
+        "parse": "ArmorTrailingData",
+        "verify": null
+      },
+      "ssh_keygen": "accept",
+      "allowed_signers_line": "v ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+      "provenance": "sigs/ok_ed25519_hello.sig with the text 'junk\\n' appended after the footer line"
+    }
+  ],
+  "allowed_signers": {
+    "file": "allowed_signers",
+    "entries": [
+      {
+        "line": 3,
+        "principals": [
+          "alice"
+        ],
+        "cert_authority": false,
+        "namespaces": null,
+        "valid_after": null,
+        "valid_before": null,
+        "key": "a",
+        "comment": "spacetime-sshsig-a"
+      },
+      {
+        "line": 4,
+        "principals": [
+          "bob",
+          "carol"
+        ],
+        "cert_authority": false,
+        "namespaces": [
+          "spacetime-sshsig-test-v1",
+          "spacetime-sshsig-other-v1"
+        ],
+        "valid_after": null,
+        "valid_before": null,
+        "key": "b",
+        "comment": "two principals"
+      },
+      {
+        "line": 5,
+        "principals": [
+          "root"
+        ],
+        "cert_authority": true,
+        "namespaces": null,
+        "valid_after": "20260101Z",
+        "valid_before": "20301231235959Z",
+        "key": "a",
+        "comment": null
+      },
+      {
+        "line": 6,
+        "principals": [
+          "sk1"
+        ],
+        "cert_authority": false,
+        "namespaces": [
+          "spacetime-sshsig-test-v1"
+        ],
+        "valid_after": null,
+        "valid_before": null,
+        "key": "c",
+        "comment": "yubikey"
+      }
+    ],
+    "bad_lines": [
+      {
+        "line": "dave foo=1 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+        "expect": "AllowedSignersUnknownOption"
+      },
+      {
+        "line": "dave ssh-rsa AAAAB3NzaC1yc2E=",
+        "expect": "UnknownKeyType"
+      },
+      {
+        "line": "dave",
+        "expect": "AllowedSignersLineInvalid"
+      },
+      {
+        "line": "dave namespaces=\"x ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+        "expect": "AllowedSignersLineInvalid"
+      },
+      {
+        "line": "dave namespaces=spacetime-sshsig-test-v1 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+        "expect": "AllowedSignersLineInvalid"
+      },
+      {
+        "line": "dave,!dave ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+        "expect": "AllowedSignersLineInvalid"
+      },
+      {
+        "line": "* namespaces=\"git\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+        "expect": "AllowedSignersLineInvalid"
+      },
+      {
+        "line": "dave ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKJAvovx2tWkhd013K3oQdLKkIexUTr9B9yXG01vYbsN",
+        "expect_decode": "ok"
+      },
+      {
+        "line": "dave sk-ssh-ed25519@openssh.com AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7",
+        "expect_decode": "PublicKeyTypeMismatch"
+      }
+    ],
+    "find_principals_check": {
+      "command": "ssh-keygen -Y find-principals -s sigs/ok_ed25519_hello.sig -f allowed_signers",
+      "observed": "alice",
+      "expect": [
+        "alice"
+      ],
+      "note": "root's cert-authority entry (same key a) does not match a plain-key signature via find-principals; verified on this machine, OpenSSH_10.2p1 (contract \u00a75.5 anticipated 'root' too \u2014 documented divergence from that expectation)."
+    }
+  }
+}

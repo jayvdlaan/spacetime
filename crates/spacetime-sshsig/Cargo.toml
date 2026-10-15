@@ -1,0 +1,30 @@
+[package]
+name = "spacetime-sshsig"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "OpenSSH SSHSIG (PROTOCOL.sshsig) codec for no_std: parse, pinned-predicate verify, deterministic sign (ssh-ed25519), sk-ssh-ed25519@openssh.com verify, armor, public-key lines, fingerprints and allowed_signers — generic over the spacetime-crypto facades"
+repository.workspace = true
+readme = "README.md"
+
+[features]
+default = []       # no_std by default
+alloc = []
+std = ["alloc"]
+
+[dependencies]
+spacetime-crypto = { version = "2.0.0", path = "../spacetime-crypto", default-features = false }
+
+[dev-dependencies]
+# Test-only real backend for tests/vectors.rs (contract §0 D10). Not part of the published graph;
+# src/ stays trait-generic. Never enable `legacy_compatibility`.
+ed25519-dalek = { version = "2.2.0", default-features = false, features = ["std"] }
+sha2 = "0.10.9"
+serde_json = "1"
+
+[[test]]
+name = "alloc_api"
+required-features = ["alloc"]
+
+[package.metadata.docs.rs]
+all-features = true

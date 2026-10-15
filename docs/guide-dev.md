@@ -11,7 +11,7 @@ Feature‑gated builds
 - Default builds are no_std where possible. Enable std for examples/tests that require it.
 - Examples:
   - Default: cd spacetime && cargo check
-  - Std/examples: cd spacetime && cargo check --features std -p spacetime-core -p spacetime-module -p spacetime-async-core -p spacetime-logging -p spacetime-io -p spacetime-storage -p spacetime-crypto -p spacetime-std-runtime
+  - Std/examples: cd spacetime && cargo check --features std -p spacetime-core -p spacetime-module -p spacetime-async-core -p spacetime-logging -p spacetime-io -p spacetime-storage -p spacetime-crypto -p spacetime-sshsig -p spacetime-std-runtime
   - Run examples (selection):
     - cargo run -p spacetime-core --example simple_module --features std
     - cargo run -p spacetime-module --example graph_order --features std
@@ -54,7 +54,7 @@ Publishing checklist
 - Publish crates respecting dependency order (core first, then dependents):
   1) spacetime-core
   2) spacetime-logging, spacetime-io, spacetime-crypto, spacetime-async-core
-  3) spacetime-storage (depend on spacetime-crypto; spacetime-storage also on spacetime-io)
+  3) spacetime-sshsig, spacetime-storage (depend on spacetime-crypto; spacetime-storage also on spacetime-io)
   4) spacetime-module
   5) spacetime-macros
   6) spacetime-std-runtime
@@ -69,6 +69,7 @@ Feature matrix (no_std/std/alloc)
 | spacetime-io            | yes              | n/a   | yes |
 | spacetime-storage       | yes              | yes   | yes |
 | spacetime-crypto        | yes              | yes   | yes |
+| spacetime-sshsig        | yes              | yes   | yes |
 | spacetime-async-core    | yes              | n/a   | yes |
 | spacetime-macros        | n/a (proc-macro) | n/a   | yes |
 | spacetime-std-runtime   | no               | n/a   | yes |

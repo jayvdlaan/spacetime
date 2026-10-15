@@ -1,0 +1,6 @@
+# spacetime-sshsig allowed_signers fixture
+
+alice ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7 spacetime-sshsig-a
+bob,carol namespaces="spacetime-sshsig-test-v1,spacetime-sshsig-other-v1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKJAvovx2tWkhd013K3oQdLKkIexUTr9B9yXG01vYbsN two principals
+root cert-authority,valid-after="20260101Z",valid-before="20301231235959Z" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC+V33GKxm11791ic1JG3vEwyzyPjkqBhAfusScVAqW7
+	sk1 namespaces="spacetime-sshsig-test-v1" sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILVWgS9TDP4YxZBVJsIRIr8754uTJj07ROVp4DqU+RvJAAAABHNzaDo= yubikey

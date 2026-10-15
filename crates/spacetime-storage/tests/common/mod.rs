@@ -1,4 +1,5 @@
-//! Test-only real SHA-256: `sha2` behind the `spacetime-crypto` facade. Dev dependency only; `src/` never sees a
+//! Test-only real SHA-256: `sha2` behind the `spacetime-crypto` facade, the
+//! Sha256 half of `spacetime-sshsig/tests/common/mod.rs`. Dev dependency only; `src/` never sees a
 //! concrete primitive. Plus the store-agnostic conformance suite run by both `blob_mem.rs` and
 //! `blob_fs.rs` — every item here is used by BOTH binaries (an item used by one only is dead code in
 //! the other and fails `clippy -D warnings`).
