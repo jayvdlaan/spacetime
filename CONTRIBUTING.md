@@ -77,5 +77,5 @@ maintainer first.
 
 ## Licence
 
-Spacetime is licensed under the [MIT License](LICENSE). By contributing, you
-agree your contributions are licensed under the same MIT terms.
+Spacetime is licensed under either of [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option. By contributing, you
+agree your contributions are licensed under the same MIT OR Apache-2.0 terms.

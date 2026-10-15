@@ -104,3 +104,59 @@ pub trait ChildHandle {
     /// Terminate the child process.
     fn kill(&mut self) -> Result<(), IpcError>;
 }
+
+#[cfg(test)]
+mod tests {
+    extern crate std;
+    use super::*;
+    use std::string::{String, ToString};
+    use std::vec::Vec;
+
+    const ALL: [IpcError; 10] = [
+        IpcError::RegionCreateFailed,
+        IpcError::RegionMapFailed,
+        IpcError::SendFailed,
+        IpcError::RecvFailed,
+        IpcError::ConnectionClosed,
+        IpcError::SpawnFailed,
+        IpcError::KillFailed,
+        IpcError::Timeout,
+        IpcError::InvalidArgument,
+        IpcError::NameTooLong,
+    ];
+
+    #[test]
+    fn every_error_displays_a_distinct_non_empty_message() {
+        let mut seen: Vec<String> = Vec::new();
+        for e in ALL {
+            let s = e.to_string();
+            assert!(!s.is_empty(), "{e:?} has an empty message");
+            assert!(!seen.contains(&s), "{e:?} repeats the message {s:?}");
+            seen.push(s);
+        }
+        assert_eq!(seen.len(), 10);
+    }
+
+    struct Fixed<const N: usize>([u8; N]);
+
+    impl<const N: usize> SharedRegion for Fixed<N> {
+        fn as_ptr(&self) -> *const u8 {
+            self.0.as_ptr()
+        }
+        fn as_mut_ptr(&mut self) -> *mut u8 {
+            self.0.as_mut_ptr()
+        }
+        fn len(&self) -> usize {
+            N
+        }
+    }
+
+    #[test]
+    fn is_empty_follows_len() {
+        assert!(Fixed([0u8; 0]).is_empty());
+        let mut r = Fixed([0u8; 4]);
+        assert!(!r.is_empty());
+        assert_eq!(r.len(), 4);
+        assert_eq!(r.as_ptr(), r.as_mut_ptr().cast_const());
+    }
+}

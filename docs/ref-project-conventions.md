@@ -1,6 +1,6 @@
 # Project Conventions Reference
 
-This document defines the complete structural, naming, and organizational conventions used across the Airspace ecosystem. Any agent or contributor adding files, directories, crates, configs, Docker infrastructure, documentation, or tooling to a project based on this runtime must follow these rules.
+This document defines the complete structural, naming, and organizational conventions used across a Spacetime-based ecosystem. Any agent or contributor adding files, directories, crates, configs, Docker infrastructure, documentation, or tooling to a project based on this runtime must follow these rules.
 
 This is the authoritative reference. When in doubt, match existing structure exactly.
 
@@ -47,7 +47,7 @@ At a glance, the repo contains:
 
 ## Super Project Structure
 
-A **super project** is the top-level repository that aggregates subprojects (git submodules) and provides shared infrastructure for building, testing, and deploying them together. Airspace is a super project.
+A **super project** is the top-level repository that aggregates subprojects (git submodules) and provides shared infrastructure for building, testing, and deploying them together. A product line built on Spacetime is typically organized as one.
 
 ### Directory layout
 
@@ -146,9 +146,9 @@ Subprojects have their own `CLAUDE.md`, `README.md`, and `docs/` — the super p
 Subprojects in the repository form a dependency stack. Dependencies must only point downward — a subproject at layer N may depend on layers < N but never on layers > N.
 
 ```
-Applications (nanopass, etc.)       — Layer 3: Services
+Applications (webapp, etc.)       — Layer 3: Services
          ↓
-      nanokey                       — Layer 2: Crypto boundary
+      keysvc                       — Layer 2: Crypto boundary
          ↓
    framework extensions (airframe-srv)  — Layer 1b: Framework extensions
          ↓
@@ -171,7 +171,7 @@ Extension projects:
 ### Rules
 
 - **No upward dependencies.** A framework crate must never depend on a service crate.
-- **No lateral dependencies between services** at the same layer (nanopass does not depend on nanokey directly for types — use shared extension crates instead).
+- **No lateral dependencies between services** at the same layer (webapp does not depend on keysvc directly for types — use shared extension crates instead).
 - **When a crate is reusable across services**, migrate it to an extension project rather than leaving it in a service subproject.
 
 ---
@@ -240,7 +240,7 @@ Standard recipes for subproject justfiles:
 | `run` | Run the main binary (service subprojects only) |
 | `doc` | `cargo doc --workspace --no-deps` |
 
-Subproject justfiles are optional — contributors can always use `cargo` directly or use the super project root justfile. They are most valuable for service subprojects (nanokey, nanopass) where the run command has flags and environment setup.
+Subproject justfiles are optional — contributors can always use `cargo` directly or use the super project root justfile. They are most valuable for service subprojects (keysvc, webapp) where the run command has flags and environment setup.
 
 ### Extension projects
 
@@ -284,18 +284,18 @@ Crate names follow the naming convention of their parent project. Pick one conve
 | Platform/runtime libraries | `kebab-case` | `{project}-{component}` | `spacetime-core`, `spacetime-logging` |
 | Application frameworks | `snake_case` | `{project}_{component}` | `airframe_core`, `airframe_http` |
 | Framework extensions | `snake_case` | `{parent}_{scope}_{component}` | `airframe_srv_sessions`, `airframe_srv_ratelimit` |
-| Game-specific isolates | `snake_case` | `{parent}_{engine}_{component}` | `afterburner_rage_client`, `jetfuel_red_core` |
-| Services (shared types) | `snake_case` | `lib{project}` | `libnanokey`, `libnanopass` |
-| Services (binary) | `snake_case` | `{project}` | `nanokey`, `nanopass` |
-| Services (CLI) | `snake_case` | `{project}_cli` | `nanokey_cli`, `nanopass_cli` |
-| Services (client SDK) | `snake_case` | `{project}_client` | `nanokey_client`, `nanopass_client` |
+| Game-specific isolates | `snake_case` | `{parent}_{engine}_{component}` | `mygame_unreal_client`, `mygame_godot_core` |
+| Services (shared types) | `snake_case` | `lib{project}` | `libkeysvc`, `libwebapp` |
+| Services (binary) | `snake_case` | `{project}` | `keysvc`, `webapp` |
+| Services (CLI) | `snake_case` | `{project}_cli` | `keysvc_cli`, `webapp_cli` |
+| Services (client SDK) | `snake_case` | `{project}_client` | `keysvc_client`, `webapp_client` |
 
 ### Rules
 
 - **Never mix** kebab-case and snake_case crate names within the same project.
 - **Crate directory name must match** the crate name in `Cargo.toml` (with hyphens for kebab, underscores for snake).
 - **Prefer short, descriptive component names.** `http` not `http_server_module`. `kv` not `key_value_store`.
-- **When scope matches the component, use `core`.** Extension crates that wrap the engine itself use `{parent}_{scope}_core` — never repeat the scope. Example: `afterburner_red_core` not `afterburner_red_red`.
+- **When scope matches the component, use `core`.** Extension crates that wrap the engine itself use `{parent}_{scope}_core` — never repeat the scope. Example: `mygame_godot_core` not `mygame_godot_godot`.
 
 ---
 
@@ -334,9 +334,9 @@ resolver = "2"
 [workspace.package]
 version = "0.1.0-beta"
 license = "MIT"
-repository = "https://git.vdlaan.io/core/project"
-homepage = "https://git.vdlaan.io/core/project"
-documentation = "https://git.vdlaan.io/core/project#readme"
+repository = "https://git.example.org/<org>/<project>"
+homepage = "https://git.example.org/<org>/<project>"
+documentation = "https://git.example.org/<org>/<project>#readme"
 ```
 
 ### Individual crate
@@ -445,7 +445,7 @@ This works because:
 
 ### Registry publishing
 
-Crates are published to the private Forgejo registry at `git.vdlaan.io` (sparse index). The existing `publish-all.sh` script handles phased publishing in dependency order.
+Crates are published to the workspace package registry (a private sparse-index registry, configured in `.cargo/config.toml`) in dependency order; public releases go to crates.io (see `guide-release.md`).
 
 Pre-release versions (`-dev.N`, `-beta.N`) are valid SemVer and can be published to the registry. They will not be picked up by consumers using standard `^x.y.z` requirements.
 
@@ -456,7 +456,7 @@ Tags are per-subproject using the format `{subproject}/v{version}`:
 ```
 spacetime/v0.2.0
 airframe/v0.5.0
-nanokey/v0.7.0-beta.1
+keysvc/v0.7.0-beta.1
 ```
 
 Tags are created for beta and stable releases, not for dev builds.
@@ -777,22 +777,22 @@ What are the positive and negative results?
 configs/
 ├── docker/
 │   ├── dev/               # Docker dev configs
-│   │   ├── nanokey.base.toml
-│   │   └── nanokey.factors.toml
+│   │   ├── keysvc.base.toml
+│   │   └── keysvc.factors.toml
 │   ├── int/
-│   │   └── nanokey.base.toml
+│   │   └── keysvc.base.toml
 │   ├── test/
-│   │   ├── nanokey.base.toml
-│   │   ├── nanokey.factors.toml
-│   │   ├── nanokey.policies.json
-│   │   ├── nanopass.base.toml
-│   │   └── nanopass.binding.toml
+│   │   ├── keysvc.base.toml
+│   │   ├── keysvc.factors.toml
+│   │   ├── keysvc.policies.json
+│   │   ├── webapp.base.toml
+│   │   └── webapp.binding.toml
 │   └── prod/
-│       ├── nanokey.base.toml
-│       ├── nanokey.hardened.toml
-│       └── nanopass.base.toml
+│       ├── keysvc.base.toml
+│       ├── keysvc.hardened.toml
+│       └── webapp.base.toml
 └── local/
-    └── nanopass_app.toml   # Bare-metal local dev configs
+    └── webapp_app.toml   # Bare-metal local dev configs
 ```
 
 ### Config file naming
@@ -801,7 +801,7 @@ Pattern: `{service}.{variant}.{ext}`
 
 | Component | Convention | Examples |
 |-----------|-----------|----------|
-| Service name | Lowercase, matches crate name | `nanokey`, `nanopass` |
+| Service name | Lowercase, matches crate name | `keysvc`, `webapp` |
 | Variant | Lowercase, describes the overlay | `base`, `factors`, `hardened`, `binding`, `ssr` |
 | Extension | Matches format | `.toml`, `.json`, `.yaml` |
 
@@ -811,7 +811,7 @@ Pattern: `{service}.{variant}.{ext}`
 - **JSON only when required** by the consuming system (e.g., policy files).
 - **`base` is the foundational config** for each service in each tier. Every service must have a `{service}.base.toml`.
 - **Variants are overlays.** They extend or override the base config for specific scenarios (factors, hardened, binding, ssr, auto-unseal).
-- **Config paths are set via environment variable.** `AIRFRAME_CONFIG_PATH=/configs/docker/test/nanokey.base.toml`. Multiple files colon-separated: `path1.toml:path2.toml`.
+- **Config paths are set via environment variable.** `AIRFRAME_CONFIG_PATH=/configs/docker/test/keysvc.base.toml`. Multiple files colon-separated: `path1.toml:path2.toml`.
 - **Local configs go in `configs/local/`.** These are for bare-metal `cargo run` development without Docker.
 - **Never commit secrets in config files.** Use environment variables for sensitive values (keys, passwords, tokens).
 - **Docker configs are read-only mounted.** Volumes mount `configs/` as `:ro`.
@@ -825,9 +825,9 @@ Pattern: `{service}.{variant}.{ext}`
 Dockerfiles live in the subproject they build:
 
 ```
-nanokey/Dockerfile              # Builds the nanokey server
-nanopass/Dockerfile             # Builds the nanopass server
-nanopass/crates/nanopass_web/Dockerfile  # Builds the web frontend
+keysvc/Dockerfile              # Builds the keysvc server
+webapp/Dockerfile             # Builds the webapp server
+webapp/crates/webapp_web/Dockerfile  # Builds the web frontend
 ```
 
 ### Dockerfile conventions
@@ -897,19 +897,19 @@ Pattern: `{variant}.yml`
 
 - `base.yml` is **always present** in each tier. It defines the foundational services.
 - Overlay files **extend or override** base definitions for specific scenarios.
-- Compose project name: `airspace-{tier}` (e.g., `name: airspace-dev`).
-- Overlay project name: `airspace-{tier}-{variant}` (e.g., `name: airspace-dev-factors`).
+- Compose project name: `acme-{tier}` (e.g., `name: acme-dev`).
+- Overlay project name: `acme-{tier}-{variant}` (e.g., `name: acme-dev-factors`).
 
 ### Compose conventions
 
 ```yaml
-name: airspace-{tier}
+name: acme-{tier}
 services:
   {service}:
     build:
       context: ../../..          # Always repo root
       dockerfile: {subproject}/Dockerfile
-    image: airspace/{service}:{tier}
+    image: acme/{service}:{tier}
     container_name: {service}-{tier}
     environment:
       - RUST_LOG=${SERVICE_RUST_LOG:-info}
@@ -931,8 +931,8 @@ volumes: {}
 
 ### Rules
 
-- **Image tag matches tier.** `airspace/nanokey:dev`, `airspace/nanokey:test`, `airspace/nanokey:prod`.
-- **Container name is `{service}-{tier}`.** `nanokey-dev`, `nanopass-test`.
+- **Image tag matches tier.** `acme/keysvc:dev`, `acme/keysvc:test`, `acme/keysvc:prod`.
+- **Container name is `{service}-{tier}`.** `keysvc-dev`, `webapp-test`.
 - **Config path via env var.** `AIRFRAME_CONFIG_PATH` points to the config inside the mounted volume.
 - **`depends_on` with `condition: service_healthy`** for service ordering.
 - **`restart: unless-stopped`** for test and prod tiers, omitted for dev.
@@ -950,7 +950,7 @@ Stored in `.run/` at the repo root. Naming:
 
 | Type | Pattern | Examples |
 |------|---------|----------|
-| Server run | `{service} [profile].run.xml` | `nanokey [local].run.xml` |
+| Server run | `{service} [profile].run.xml` | `keysvc [local].run.xml` |
 | Test suite | `test-{subproject}.run.xml` | `test-airframe.run.xml`, `test-spacetime.run.xml` |
 
 ### Cargo aliases
@@ -959,7 +959,7 @@ Defined in `.cargo/config.toml` at the repo root:
 
 ```toml
 [alias]
-web-dev = "run -p nanopass_web --features leptos-ssr"
+web-dev = "run -p webapp_web --features leptos-ssr"
 ```
 
 Use aliases for frequently used multi-flag commands. Keep them descriptive.
@@ -1008,7 +1008,7 @@ Tags use a per-subproject format: `{subproject}/v{version}`. See [Versioning](#v
 ```
 spacetime/v0.2.0
 airframe/v0.5.0
-nanokey/v0.7.0-beta.1
+keysvc/v0.7.0-beta.1
 ```
 
 ### Rules
@@ -1038,8 +1038,8 @@ Set in Docker Compose files or IDE run configurations, never in `.env`:
 
 | Variable | Purpose | Example |
 |----------|---------|---------|
-| `RUST_LOG` | Log level filter | `info,nanokey=debug` |
-| `AIRFRAME_CONFIG_PATH` | Config file path(s), colon-separated | `/configs/docker/test/nanokey.base.toml` |
+| `RUST_LOG` | Log level filter | `info,keysvc=debug` |
+| `AIRFRAME_CONFIG_PATH` | Config file path(s), colon-separated | `/configs/docker/test/keysvc.base.toml` |
 | `AIRFRAME_CONFIG__{SECTION}__{KEY}` | Config override via env | `AIRFRAME_CONFIG__STORAGE__KV__DRIVER=filesystem` |
 | `{SERVICE}_SECRETS_KEY_HEX` | Secret key (dev/test only) | `0123456789abcdef...` |
 
@@ -1048,7 +1048,7 @@ Set in Docker Compose files or IDE run configurations, never in `.env`:
 - **`.env` is for build tooling only** (Docker BuildKit, Compose CLI).
 - **Never put secrets in `.env`.** Secrets go in compose env vars or secret mounts.
 - **Config overrides use double-underscore nesting.** `AIRFRAME_CONFIG__{SECTION}__{KEY}`.
-- **Service-specific env var prefixes** use the service name in uppercase: `NANOKEY_`, `NANOPASS_`.
+- **Service-specific env var prefixes** use the service name in uppercase: `KEYSVC_`, `WEBAPP_`.
 
 ---
 

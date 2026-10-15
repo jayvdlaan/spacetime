@@ -12,7 +12,7 @@ own.
 - `spacetime-core` — `Duration`, `Instant`, `Version`, and core error/status types (`no_std`)
 - `spacetime-module` — the `Module` trait and dependency-graph ordering
 - `spacetime-capabilities` — capability identifiers and module capability sets
-- `spacetime-io` / `spacetime-storage` / `spacetime-crypto` / `spacetime-health` / `spacetime-logging` — platform facades (I/O, storage, crypto, health, logging)
+- `spacetime-io` / `spacetime-storage` / `spacetime-crypto` / `spacetime-health` / `spacetime-logging` — platform facades (I/O, storage incl. a content-addressed blob seam, crypto, health, logging)
 - `spacetime-async-core` — async runtime / spawner primitives
 - `spacetime-std-runtime` — a `std`-backed Clock/Timer/Runtime implementation
 - `spacetime-macros` — supporting macros
@@ -44,6 +44,7 @@ cargo run -p spacetime-core        --example simple_module  --features std
 cargo run -p spacetime-module      --example graph_order    --features std
 cargo run -p spacetime-logging     --example simple         --features std
 cargo run -p spacetime-storage     --example memstore_basic --features std,alloc
+cargo run -p spacetime-storage     --example blob_fs        --features std
 cargo run -p spacetime-async-core  --example tokio_spawner  --features std
 cargo run -p spacetime-std-runtime --example two_modules    --features logging
 ```
@@ -87,4 +88,4 @@ hygiene, and the verification a pull request must meet.
 
 ## License
 
-Licensed under the [MIT License](LICENSE).
+Licensed under either of [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.

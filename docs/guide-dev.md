@@ -20,6 +20,7 @@ Feature‑gated builds
     - cargo run -p spacetime-io --example std_stdout --features std
     - cargo run -p spacetime-storage --example memstore_basic --features std,alloc
     - cargo run -p spacetime-storage --example prefix_scan --features std
+    - cargo run -p spacetime-storage --example blob_fs --features std
     - cargo run -p spacetime-async-core --example tokio_spawner --features std
     - cargo run -p spacetime-std-runtime --features logging --example two_modules
 
@@ -52,10 +53,11 @@ Publishing checklist
   - cargo publish -p <crate> --dry-run
 - Publish crates respecting dependency order (core first, then dependents):
   1) spacetime-core
-  2) spacetime-logging, spacetime-io, spacetime-storage, spacetime-crypto, spacetime-async-core
-  3) spacetime-module
-  4) spacetime-macros
-  5) spacetime-std-runtime
+  2) spacetime-logging, spacetime-io, spacetime-crypto, spacetime-async-core
+  3) spacetime-storage (depend on spacetime-crypto; spacetime-storage also on spacetime-io)
+  4) spacetime-module
+  5) spacetime-macros
+  6) spacetime-std-runtime
 
 Feature matrix (no_std/std/alloc)
 

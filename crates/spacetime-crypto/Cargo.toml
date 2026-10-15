@@ -3,12 +3,21 @@ name = "spacetime-crypto"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Spacetime crypto facades: no_std-first RNG/entropy traits"
+description = "Spacetime crypto facades: no_std-first traits for RNG/entropy, SHA-2, HMAC, Ed25519 (strict), ChaCha20-Poly1305, HKDF, Argon2id and X25519, plus an RFC-vector conformance harness"
 repository.workspace = true
+readme = "README.md"
 
 [features]
-default = [] # no_std by default
+default = []       # no_std by default
 alloc = []
 std = ["alloc"]
+conformance = []    # RFC test-vector harness; pure core. Detail messages need `alloc`.
 
 [dependencies]
+
+[[test]]
+name = "conformance_doubles"
+required-features = ["conformance"]
+
+[package.metadata.docs.rs]
+all-features = true

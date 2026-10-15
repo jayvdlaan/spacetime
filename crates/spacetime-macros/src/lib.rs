@@ -1,3 +1,21 @@
+//! Procedural macros for Spacetime modules (experimental).
+//!
+//! One attribute macro, [`macro@spacetime_module`], stamps a plain struct with the
+//! descriptor constants a module declares by hand otherwise: `ST_NAME`, `ST_VERSION`
+//! and `ST_DEPS`. Arguments are optional; a bare `#[spacetime_module]` derives the name
+//! from the struct identifier, version `0.1.0` and no dependencies.
+//!
+//! ```ignore
+//! use spacetime_macros::spacetime_module;
+//!
+//! #[spacetime_module(name = "clock", version = "1.2.0", deps("logging"))]
+//! struct ClockModule;
+//!
+//! assert_eq!(ClockModule::ST_NAME, "clock");
+//! ```
+//!
+//! The crate is `proc-macro` only and carries no runtime code; the traits the
+//! constants feed live in `spacetime-core`.
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::parse::Parser;
@@ -49,15 +67,13 @@ pub fn spacetime_module(args: TokenStream, input: TokenStream) -> TokenStream {
                     }
                 }
             }
-            Meta::List(list) => {
-                if list.path.is_ident("deps") {
-                    // Parse list tokens as comma-separated string literals
-                    let lit_parser = Punctuated::<Lit, Token![,]>::parse_terminated;
-                    if let Ok(lits) = lit_parser.parse(list.tokens.clone().into()) {
-                        for lit in lits.iter() {
-                            if let Lit::Str(s) = lit {
-                                deps.push(s.value());
-                            }
+            Meta::List(list) if list.path.is_ident("deps") => {
+                // Parse list tokens as comma-separated string literals
+                let lit_parser = Punctuated::<Lit, Token![,]>::parse_terminated;
+                if let Ok(lits) = lit_parser.parse(list.tokens.clone().into()) {
+                    for lit in lits.iter() {
+                        if let Lit::Str(s) = lit {
+                            deps.push(s.value());
                         }
                     }
                 }

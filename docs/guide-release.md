@@ -32,6 +32,57 @@ Settle these before any work; they shape everything after.
 
 ---
 
+## Public-commit criteria **[GATE]**
+
+This section is permanent. It applies to **every** commit that reaches the public line: the public `main`, the GitHub mirror and every crates.io upload. It is not only for major releases.
+
+The canonical remote is private, and development there is unrestricted: WIP, scratch history, internal notes and agent-driven commits all live there freely. The public line is a deliberate **projection** of that work. Every public commit is chosen, read and checked against the list below. Nothing reaches the public line as a side effect, whether from pushing a dev branch, a merge or a mirror sync.
+
+A commit may land on the public line only when **all** of the following hold.
+
+1. **Nothing private.** The tree contains none of the following:
+   - private hostnames, IPs or registry names and URLs;
+   - paths, file maps or line references into private consumers;
+   - tracker, hub, queue or session ids;
+   - internal codenames or audit-finding ids;
+   - personal data.
+   Test fixtures are synthetic, taken from public specs and vectors, or explicitly cleared by the maintainer. This applies especially to captures from real devices, whose serials, keybox ids and build fingerprints identify the hardware.
+2. **Gates green at exactly this commit.** `just release-check` passes with zero warnings, `cargo audit` included. Every advisory is either fixed or named and accepted in the release notes. No lint is suppressed and no test is deleted to get there.
+3. **Intentional scope.** Every changed file belongs to the stated change. The rules are:
+   - one topic per commit, so dev history is squashed per topic;
+   - no WIP, drive-by edits, generated artefacts or unexplained binaries.
+   The maintainer reads the full diff against the previous public commit.
+4. **Messages written for an outside reader.** The subject and body say what changed and why. They carry no session or tool trailers and no references to private threads, queues, workflows or plans. The only trailer allowed is the AI-authorship `Co-Authored-By` line required by [`templates/AGENTS.md`](templates/AGENTS.md).
+5. **Provenance and licensing.**
+   - Code is project-authored, or under a compatible licence with its attribution kept.
+   - Nothing is ported from a private or incompatible source.
+   - Test vectors name their source.
+   - New dependencies have their licences checked (Phase 5).
+6. **Public docs only.** The canonical remote keeps the following:
+   - internal design and planning docs;
+   - runbooks for private infrastructure;
+   - docs that name private consumers.
+   Public docs describe the public crates and nothing behind them.
+7. **Honest versioning.** Breaking changes get a semver bump. The release notes list:
+   - every breaking change;
+   - every removed algorithm or feature;
+   - every behaviour change that can newly fail for a user, such as stricter TLS or a dropped cipher.
+8. **The maintainer pushes.** Agents prepare candidate commits on a local branch, run the checks and present the result. They never push the public line, and they never tag or publish to it.
+
+**Check.** Run these over the candidate range `<last-public>..<candidate>`:
+
+```bash
+git diff --stat <last-public> <candidate>                    # scope: every file accounted for
+git grep -nIi -f <private-denylist> <candidate>              # tree: no private names (1)
+git log --format='%H%n%B' <last-public>..<candidate> \
+  | grep -nIi -f <private-denylist> -e '^[A-Za-z-]*-Session:'  # messages (1, 4)
+just release-check                                           # at <candidate> (2)
+```
+
+`<private-denylist>` holds one pattern per line: hosts, registry names, internal codenames and id prefixes. It lives on the canonical remote, **never in the public tree**, because the list itself would leak what it guards.
+
+---
+
 ## Phase 1 — Readiness audit
 
 Assess the workspace against `ref-project-conventions.md` and the security model;
@@ -116,7 +167,12 @@ Drop in (templates in [`templates/`](templates/)):
 3. **`description`** on every crate (crates.io requires it).
 4. **Version sweep** to the target (bump `[workspace.package].version`; `^`
    semantics mean a `1.0.1` patch only needs the package-version line bumped — the
-   `"1.0.0"` dep reqs already accept it).
+   `"1.0.0"` dep reqs already accept it). A **major** bump is different: every
+   inter-crate `version = "<old>"` requirement must move to the new major in the
+   same commit, or the workspace stops resolving, and every *consumer* repo that
+   pins these crates by `version` + `path` needs the same sweep before its
+   own pins move. `grep -rn 'version = "1\.'
+   --include=Cargo.toml` is the check.
 5. **Confirm names are free**: query `https://crates.io/api/v1/crates/<name>`
    (404 = free). crates.io is one flat namespace and treats `-`/`_` as equivalent.
 6. **Dry-run** a true leaf: `cargo publish -p <leaf> --dry-run`. Dependent crates
@@ -172,7 +228,7 @@ free of stale status/maturity notes once you're at `1.0`.
 
 - [ ] **Rate limits**: new-crate (1/10min, burst 5) vs new-version (lenient). Size the publish window accordingly.
 - [ ] **Topological order**, deps before dependents; **path-only dev-deps are stripped** on publish (don't need versions), but versioned inter-crate deps must resolve.
-- [ ] **`^` version semantics**: `"1.0.0"` accepts `1.0.x` — patch bumps only touch `[workspace.package].version`.
+- [ ] **`^` version semantics**: `"1.0.0"` accepts `1.0.x` — patch bumps only touch `[workspace.package].version`. A major bump must also rewrite every inter-crate requirement **and** every consumer repo's pins.
 - [ ] **Registry decoupling** done; `repository` + `description` present on all crates.
 - [ ] **Orphan-root** mirror + the lineage pushed to the canonical remote too.
 - [ ] **Names verified free** before the first publish (permanent).

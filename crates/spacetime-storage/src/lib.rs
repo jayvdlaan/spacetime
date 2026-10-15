@@ -10,6 +10,13 @@
 //! Examples (std feature):
 //! - Basic MemStore usage: `cargo run -p spacetime-storage --example memstore_basic --features std,alloc`
 //! - Prefix scan: `cargo run -p spacetime-storage --example prefix_scan --features std`
+//! - Filesystem blob store: `cargo run -p spacetime-storage --example blob_fs --features std`
+//!
+//! Blob seam (content-addressed, streaming):
+//! - [`BlobStore`] / [`BlobWriter`]: put a stream, get back its SHA-256 [`BlobId`]; open by id as a
+//!   [`spacetime_io::Read`]; `open_verified` re-hashes while streaming and fails at EOF on a mismatch.
+//! - `MemBlobStore` (`alloc`) and `FsBlobStore` (`std`; `<root>/sha256/<aa>/<hex64>`, tmp + fsync + rename).
+//! - Class-agnostic: one store per class directory (e.g. `blobs/<class>/`).
 
 // ---------------------------------------------------------------------------
 // Error types
@@ -17,6 +24,7 @@
 
 /// Compact error codes for storage operations.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
+#[non_exhaustive]
 pub enum StorageError {
     /// The provided key does not exist.
     NotFound,
@@ -26,6 +34,10 @@ pub enum StorageError {
     Invalid,
     /// Unspecified I/O error.
     Io,
+    /// A verified blob read reached EOF and the recomputed SHA-256 differs from the id.
+    HashMismatch,
+    /// The SHA-256 backend behind a blob store failed (see `spacetime_crypto::CryptoErrorKind`).
+    Digest(spacetime_crypto::CryptoErrorKind),
 }
 
 pub type StorageResult<T> = core::result::Result<T, StorageError>;
@@ -123,6 +135,28 @@ pub mod alloc_helpers;
 
 mod namespaced;
 pub use namespaced::Namespaced;
+
+// ---------------------------------------------------------------------------
+// Content-addressed blob seam
+// ---------------------------------------------------------------------------
+
+/// Blob traits, [`BlobId`] and error mapping (no_std, no alloc).
+pub mod blob;
+/// Filesystem blob store (`std`).
+#[cfg(feature = "std")]
+pub mod blob_fs;
+/// In-memory blob store (`alloc`).
+#[cfg(feature = "alloc")]
+pub mod blob_mem;
+/// Streaming reader that re-hashes a blob and fails at EOF on mismatch.
+pub mod blob_verify;
+
+pub use blob::{BlobId, BlobStore, BlobWriter, BLOB_ID_HEX_LEN, BLOB_ID_LEN};
+#[cfg(feature = "std")]
+pub use blob_fs::FsBlobStore;
+#[cfg(feature = "alloc")]
+pub use blob_mem::MemBlobStore;
+pub use blob_verify::{Verification, VerifiedReader};
 
 // ---------------------------------------------------------------------------
 // Tests

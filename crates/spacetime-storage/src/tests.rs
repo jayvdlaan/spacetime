@@ -167,6 +167,8 @@ fn storage_error_variants() {
         StorageError::BufferTooSmall,
         StorageError::Invalid,
         StorageError::Io,
+        StorageError::HashMismatch,
+        StorageError::Digest(spacetime_crypto::CryptoErrorKind::Failed),
     ];
     for v in &variants {
         let cloned = *v;

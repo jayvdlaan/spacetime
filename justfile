@@ -38,15 +38,25 @@ release-check:
     cargo fmt --all -- --check
     cargo clippy --workspace --all-targets -- -D warnings
     cargo test --workspace
+    # crate-specific feature that the workspace default does not enable
+    cargo test -p spacetime-crypto --features std,conformance
+    cargo test -p spacetime-storage --features std
     cargo build --workspace
     # no_std discipline: pure no_std builds of the core crates
     cargo build -p spacetime-core --no-default-features
     cargo build -p spacetime-module --no-default-features
     cargo build -p spacetime-io --no-default-features
     cargo build -p spacetime-crypto --no-default-features
+    cargo build -p spacetime-storage --no-default-features
+    cargo build -p spacetime-storage --no-default-features --features alloc
     # embedded target (proves no_std end-to-end)
     cargo build -p spacetime-module --target riscv32imac-unknown-none-elf
+    cargo build -p spacetime-storage --no-default-features --target riscv32imac-unknown-none-elf
     RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps
+    # default features hide the blob stores; docs.rs builds all-features, so gate that surface too
+    RUSTDOCFLAGS="-D warnings" cargo doc -p spacetime-storage --no-deps --all-features
+    # RustSec advisories
+    cargo audit
 
 # Publish every crate to crates.io in dependency order.
 # IRREVERSIBLE: crates.io versions and names are permanent (yank != delete).

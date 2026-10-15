@@ -176,6 +176,36 @@ mod tests {
     }
 
     #[test]
+    fn now_secs_and_now_millis_agree_and_are_after_2020() {
+        let secs = now_secs();
+        let millis = now_millis();
+        // 2020-01-01T00:00:00Z; a clock before this is not set.
+        assert!(secs > 1_577_836_800);
+        // Taken a few ns apart: the second reading is never behind the first.
+        assert!(millis / 1000 >= secs);
+        assert!(millis / 1000 - secs <= 1);
+    }
+
+    #[test]
+    fn default_constructors_match_new() {
+        use spacetime_core::MonotonicClock;
+        let rt = StdRuntime::default();
+        let mono = StdMonotonicClock::default();
+        assert!(rt.clock().now().millis_since_epoch > 0);
+        assert!(mono.now_monotonic().ticks_ms < 1000);
+        assert!(rt.monotonic_clock().now_monotonic().ticks_ms < 1000);
+    }
+
+    #[cfg(feature = "logging")]
+    #[test]
+    fn tracing_logging_init_is_idempotent() {
+        // A second global subscriber is refused by tracing; the helper ignores that
+        // and still installs the spacetime logger, so calling it twice must not panic.
+        logging::init_tracing_logging();
+        logging::init_tracing_logging();
+    }
+
+    #[test]
     fn std_runtime_can_start_dummy_module() {
         let rt = StdRuntime::new();
         let mut ctx = StInitCtx;

@@ -1,8 +1,74 @@
-//! Spacetime crypto facades: RNG/entropy traits and minimal error model.
+//! Spacetime crypto facades: no_std-first **trait facades** for RNG/entropy,
+//! SHA-2, HMAC, Ed25519 (strict), ChaCha20-Poly1305/XChaCha20-Poly1305,
+//! HKDF, Argon2id, and X25519, plus an RFC-vector conformance harness.
+//!
+//! This crate defines the seam, not the backend: it contains **no concrete
+//! cryptographic implementation and no cryptographic randomness**. A
+//! downstream crate implements these traits against a real backend (pure
+//! Rust, an OS API, or a hardware engine); this crate only fixes the shapes
+//! and the error contracts so a portable verifier or reader can program
+//! against them.
 //!
 //! Goals:
-//! - no_std by default; avoid allocations in core traits.
-//! - Simple, portable contracts for random bytes and entropy sources.
+//! - no_std by default; no allocations required in any core trait method —
+//!   non-secret fixed-size outputs return by value, secret or
+//!   variable-length outputs go into caller-provided buffers.
+//! - Every method is fallible ([`CryptoResult`]), since the facade also
+//!   fronts hardware engines that can be busy or absent.
+//! - One backend type can implement every trait below; traits use `&self`
+//!   (streaming digest state uses `&mut self`) so `&dyn Trait` is shareable.
+//!
+//! Traits (RFC references in each module):
+//! - [`Rng`], [`EntropySource`] — random bytes / entropy (pre-existing).
+//! - [`Sha256`]/[`Sha256State`], [`Sha512`]/[`Sha512State`] — digest
+//!   (`crate::digest`, FIPS 180-4).
+//! - [`HmacSha256`] — MAC (`crate::hmac`, RFC 2104/4231).
+//! - [`Ed25519Verify`], [`Ed25519Sign`] — signatures (`crate::ed25519`, RFC
+//!   8032). `Ed25519Verify::ed25519_verify` implements the **strict**
+//!   verification profile: canonical `S`, canonical and non-small-order `R`
+//!   and `A`, the cofactorless equation. See `crate::ed25519` for the full
+//!   normative statement. This is *not* the ZIP-215 profile.
+//! - [`Ed25519ToX25519`] — Edwards→Montgomery public-key conversion for
+//!   X25519 use of an Ed25519 key (`crate::ed25519`; domain = keys passing
+//!   `ed25519_validate_public_key`).
+//! - [`aead::ChaCha20Poly1305`], [`aead::XChaCha20Poly1305`] — AEAD
+//!   (`crate::aead`, RFC 8439 / draft-irtf-cfrg-xchacha).
+//! - [`kdf::HkdfSha256`], [`kdf::Argon2id`] — key derivation (`crate::kdf`,
+//!   RFC 5869 / RFC 9106).
+//! - [`x25519::X25519`] — Diffie-Hellman (`crate::x25519`, RFC 7748); an
+//!   all-zero shared secret (low-order peer) is rejected.
+//!
+//! # Object safety
+//!
+//! | Trait | `dyn`-usable | Note |
+//! |---|---|---|
+//! | [`Sha256`], [`Sha512`] | yes, as `&dyn Sha256<State = S>` | associated type must be named |
+//! | [`Sha256State`], [`Sha512State`] | yes | |
+//! | [`HmacSha256`], [`Ed25519Verify`], [`Ed25519Sign`] | yes | `&self`, no generics |
+//! | [`Ed25519ToX25519`] | yes | `&self`, no generics |
+//! | [`aead::ChaCha20Poly1305`], [`aead::XChaCha20Poly1305`] | yes | provided methods dyn-callable |
+//! | [`kdf::HkdfSha256`], [`kdf::Argon2id`] | yes | |
+//! | [`x25519::X25519`] | yes | |
+//! | [`Rng`], [`EntropySource`] | yes | unchanged |
+//!
+//! # Backend obligations
+//!
+//! Implementors must: run in constant time wherever timing could leak secret
+//! data (key material, tag/MAC comparisons, the X25519 low-order check);
+//! wipe expanded secret state before returning (signing's expanded key,
+//! Argon2's memory blocks); fail closed (an AEAD open or a signature
+//! verification that cannot be authenticated must not expose plaintext or
+//! succeed).
+//!
+//! # Non-goals
+//!
+//! No handle-based/HSM signer trait (the [`Ed25519Sign`] seed API is for an
+//! in-binary root key); no batch verification; no pre-decoded key handle; no
+//! truncated or streaming HMAC; no streaming AEAD; no PEM/DER/SPKI/PKCS#8
+//! (those are adapter-layer concerns in a crate that also implements a
+//! richer consumer-facing trait such as `CipherSuite`); no RNG use inside
+//! any facade method ([`Ed25519Sign`] is deterministic; AEAD nonces are
+//! caller-supplied).
 //!
 //! # Error model
 //!
@@ -13,11 +79,57 @@
 //! Without `alloc`, [`CryptoError`] is `Copy`, `Eq`, and just as lightweight
 //! as the original enum. With `alloc`, it gains a heap-allocated message
 //! while still implementing `Clone`, `PartialEq`, and `Debug`.
+//!
+//! No new [`CryptoErrorKind`] variants were added for the traits in this
+//! crate: every situation below maps onto the five existing variants.
+//! Candidates such as `InvalidKey`, `InvalidSignature`, or `LowOrderPoint`
+//! were deliberately rejected — they would invite a caller (above all a
+//! registry verifier) to branch on *why* a verification failed, which
+//! fail-closed design forbids, and they add nothing actionable that the
+//! `alloc` detail message does not already carry.
+//!
+//! | Situation | Kind |
+//! |---|---|
+//! | Wrong buffer/output length; a parameter outside the RFC domain (Argon2 `m < 8p`, `t = 0`, `p = 0`, `p > 2^24-1`, salt too short, tag too short; HKDF OKM too long); Ed25519 public key fails import validation; X25519 low-order peer | [`CryptoErrorKind::InvalidParameter`] |
+//! | `ed25519_public_to_x25519` on a key that fails import validation | [`CryptoErrorKind::InvalidParameter`] |
+//! | `ed25519_verify` rejection for any input-caused reason; AEAD tag mismatch; HMAC verify mismatch | [`CryptoErrorKind::AuthenticationFailed`] (uniform — no reason oracle) |
+//! | Algorithm/variant absent in this environment; backend implementation limit or policy ceiling | [`CryptoErrorKind::Unsupported`] |
+//! | Transient (hardware engine busy, allocation failed) | [`CryptoErrorKind::Unavailable`] |
+//! | Backend-internal error not attributable to inputs | [`CryptoErrorKind::Failed`] |
+//! | Conformance harness: any check failed | [`CryptoErrorKind::InvalidParameter`] (+ message under `alloc`) |
 
 #![no_std]
 
 #[cfg(feature = "alloc")]
 extern crate alloc;
+
+mod util;
+
+pub mod aead;
+pub mod digest;
+pub mod ed25519;
+pub mod hmac;
+pub mod kdf;
+pub mod x25519;
+
+#[cfg(feature = "conformance")]
+pub mod conformance;
+
+pub use aead::{
+    ChaCha20Poly1305, XChaCha20Poly1305, AEAD_KEY_LEN, AEAD_TAG_LEN, CHACHA20POLY1305_NONCE_LEN,
+    XCHACHA20POLY1305_NONCE_LEN,
+};
+pub use digest::{Sha256, Sha256State, Sha512, Sha512State, SHA256_LEN, SHA512_LEN};
+pub use ed25519::{
+    Ed25519Sign, Ed25519ToX25519, Ed25519Verify, ED25519_PUBLIC_KEY_LEN, ED25519_SEED_LEN,
+    ED25519_SIGNATURE_LEN,
+};
+pub use hmac::{HmacSha256, HMAC_SHA256_LEN};
+pub use kdf::{
+    Argon2Params, Argon2id, HkdfSha256, ARGON2_MAX_P_COST, ARGON2_MIN_OUTPUT_LEN,
+    ARGON2_MIN_SALT_LEN, ARGON2_VERSION, HKDF_SHA256_MAX_OKM_LEN, HKDF_SHA256_PRK_LEN,
+};
+pub use x25519::{X25519, X25519_KEY_LEN};
 
 /// Classification of cryptographic errors.
 ///

@@ -24,6 +24,8 @@ flowchart TD
   stdrt[spacetime-std-runtime\n(std adapter)]
 
   module --> core
+  storage --> crypto
+  storage --> io
   stdrt --> core
   stdrt --> logging
   stdrt --> io

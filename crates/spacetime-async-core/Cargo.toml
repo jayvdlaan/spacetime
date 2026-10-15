@@ -16,7 +16,7 @@ async-trait = ["dep:async-trait", "std"]
 airframe-interop = []
 
 [dependencies]
-spacetime-core = { version = "1.0.0", path = "../spacetime-core", package = "spacetime-core", default-features = false }
+spacetime-core = { version = "2.0.0", path = "../spacetime-core", package = "spacetime-core", default-features = false }
 async-trait = { version = "0.1", optional = true }
 
 [dev-dependencies]

@@ -59,7 +59,7 @@ Read, in this order:
 1. **`docs/ref-project-conventions.md`** — the authoritative reference for crate
    naming, file layout, `Cargo.toml` conventions, versioning, documentation
    naming, and the Release-Readiness checklist. (This file lives here in
-   Spacetime and governs the whole Airspace ecosystem.)
+   Spacetime and governs every project built on it.)
 2. **`docs/arch-spacetime.md`** and **`docs/guide-dev.md`** — architecture and the
    feature matrix.
 3. **The `README.md` of the crate you are modifying.**

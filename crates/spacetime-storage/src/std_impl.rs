@@ -5,7 +5,7 @@ use alloc::vec::Vec;
 use std::collections::HashMap;
 
 /// An in-memory key/value store using a HashMap.
-/// Keys and values are stored as owned Vec<u8>.
+/// Keys and values are stored as owned `Vec<u8>`.
 pub struct MemStore {
     pub(crate) map: HashMap<Vec<u8>, Vec<u8>>,
 }

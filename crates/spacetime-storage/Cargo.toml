@@ -3,7 +3,7 @@ name = "spacetime-storage"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Spacetime storage facades: no_std-first key/value traits"
+description = "Spacetime storage facades: no_std-first key/value traits and a content-addressed streaming blob seam"
 repository.workspace = true
 readme = "README.md"
 
@@ -11,6 +11,16 @@ readme = "README.md"
 default = [] # no_std by default
 alloc = []
 std = ["alloc"]
+
+[dependencies]
+# Trait facades only: the store hashes through `Sha256`, streams through `Read`/`Write`.
+spacetime-crypto = { version = "2.0.0", path = "../spacetime-crypto", default-features = false }
+spacetime-io = { version = "2.0.0", path = "../spacetime-io", default-features = false }
+
+[dev-dependencies]
+# Test-only real SHA-256 for tests/common/mod.rs and examples/blob_fs.rs.
+# Not part of the published graph; src/ names no primitive.
+sha2 = "0.10.9"
 
 [[example]]
 name = "memstore_basic"
@@ -20,4 +30,17 @@ required-features = ["std", "alloc"]
 name = "prefix_scan"
 required-features = ["std"]
 
-[dependencies]
+[[example]]
+name = "blob_fs"
+required-features = ["std"]
+
+[[test]]
+name = "blob_mem"
+required-features = ["alloc"]
+
+[[test]]
+name = "blob_fs"
+required-features = ["std"]
+
+[package.metadata.docs.rs]
+all-features = true
